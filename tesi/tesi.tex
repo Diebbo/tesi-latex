@@ -9,7 +9,7 @@
 \usepackage{placeins}
 \usepackage{listings}
 \usepackage{hyperref}
-\usepackage[italian]{babel}
+\usepackage[english]{babel}
 \usepackage{tikz}
 \usepackage{parskip}
 
@@ -71,11 +71,9 @@
 
 \vspace{15mm}
 
-{\Huge{\bf Titolo della tesi }}\\
+{\Huge{\bf Homomorphic Encryption Applications }}\\
 \vspace{3mm}
-{\Huge{\bf anche su più}}\\
-\vspace{3mm}
-{\Huge{\bf righe }}\\
+{\Huge{\bf on the LA-MQTT Protocol}}\\
 \vspace{3mm}
 
 \end{center}
@@ -83,11 +81,11 @@
 \vspace{10mm}
 
 \begin{minipage}[t]{0.40\textwidth}
-{\Large{\bf Relatore: \\ Chiar.mo Prof.\\ Saverio Giallorenzo}}
+{\Large{\bf Relatore: \\ Chiar.mo Prof.\\ Federico Montori}}
 
 \vspace{3mm}
 
-{\Large{\bf Correlatore: \\ Chiar.mo Prof.\\ Federico Montori}}
+{\Large{\bf Correlatore: \\ Chiar.mo Prof.\\ Saverio Giallorenzo}}
 \end{minipage}
 \hfill
 \begin{minipage}[t]{0.40\textwidth}\raggedleft
@@ -162,7 +160,22 @@ Abstract qui (ti consiglio di farlo alla fine)
 
 
 
-\chapter{LA PROBLEMATICA}
+
+\chapter{Background}
+\section{MQTT}
+\section{LA-MQTT}
+\section{Universal location referencing}
+\subsection{Cantor Pairing}
+\section{Privacy in IoT}
+\subsection{Homomorphic Encryption}
+
+\chapter{Protocol Design}
+
+\chapter{Testing}
+
+\chapter{Performance Evaluation}
+
+\chapter{Progetto}
 \section{Glossario}
 \begin{itemize}
     \item LDS: Sensori
@@ -283,22 +296,6 @@ Se non ti piace lo stile di citazione puoi modificarlo sopra dove scrivo usepack
 \renewcommand{\appendixpagename}{Appendici}
 % \csname @openrightfalse\endcsname
 \pagenumbering{gobble}
-\begin{appendices}
-\chapter{Appendice 1}
-\label{Appendice:A}
-Probabilmente ci sono un sacco di package non utilizzati ma così funziona tutto quindi non ho indagato oltre.
-
-Inoltre su internet c'è un sacco di documentazione se ti servisse.
-\chapter{Appendice B}
-\label{Appendice:B}
-Appendice B se serve
-
-\chapter{Embed di interi PDF}
-\label{Appendice:C}
-Se ti serve puoi fare embed di PDF interi con pdfpage, scegliendo anche le pagine (o mettendo - se le vuoi tutte):
-
-\includepdf[pages=1]{pdf/sample.pdf}
-\end{appendices}
 
 \newpage~\newpage
 \chapter*{Ringraziamenti}
