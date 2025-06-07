@@ -107,7 +107,7 @@
 \newpage
 \begin{center}
     (DA FARE ALLA FINE)\\
-    5 parole chiave per caratterizzare il contenuto della dissertazione:\\ (se non ti piacciono così sparse puoi anche semplicamente scriverle su una riga sola)
+    5 parole chiave per caratterizzare il contenuto della dissertazione:\\ (se non ti piacciono così sparse puoi anche semplicemente scriverle su una riga sola)
 \end{center}
 
 % https://tex.stackexchange.com/questions/26538/words-scattered-randomly-in-on-coverpage
@@ -162,11 +162,11 @@ Abstract qui (ti consiglio di farlo alla fine)
 
 
 \chapter{Background}
-\section{Protocoll Request-Response}
-\section{Protocoll Publish-Subscribe}
+\section{Request-Response Protocol}
+\section{Publish-Subscribe Protocol}
 \subsection{MQTT}
 \subsection{LA-MQTT}
-\section{Universal location referencing}
+\section{Universal Location Referencing}
 \subsection{Cantor Pairing}
 \subsection{MGRS}
 \section{Space Filling Curves}
@@ -174,10 +174,10 @@ Abstract qui (ti consiglio di farlo alla fine)
 \subsection{Homomorphic Encryption}
 \subsubsection{Fully Homomorphic Encryption}
 \subsubsection{Partially Homomorphic Encryption}
-\section{Usage of HE for matching}
+\section{Usage of HE for Matching}
 \subsection{Distance Calculation}
-\subsection{Parkings Availablility}
-\subsection{PHE and FHE implications}
+\subsection{Parkings Availability}
+\subsection{PHE and FHE Implications}
 
 \chapter{System Architecture}
 \section{System Overview}
@@ -199,14 +199,14 @@ Abstract qui (ti consiglio di farlo alla fine)
 
 \chapter{Performance Evaluation}
 
-\chapter{Progetto}
-\section{Glossario}
+\chapter{Project}
+\section{Glossary}
 \begin{itemize}
-    \item LDS: Sensori
-    \item MC: Clienti
+    \item LDS: Sensors
+    \item MC: Clients
 \end{itemize}
 
-\section{Idea Progettuale}
+\section{Project Idea}
 L'idea centrale consiste nell'applicare i principi della \emph{homomorphic encryption} al protocollo \emph{LA-MQTT}. Quando un client invia un aggiornamento di posizione, questa viene trasmessa in forma cifrata mediante Fully Homomorphic Encryption (FHE). Il server esegue un'analisi sulle posizioni disponibili, appartenenti alla stessa area geografica, e dopo aver effettuato un controllo con la chiave di verifica, restituisce un blob cifrato contenente le distanze calcolate.
 
 \subsection{Funzionalità Principali}
