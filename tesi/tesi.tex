@@ -163,21 +163,52 @@ Abstract qui (ti consiglio di farlo alla fine)
 
 \chapter{Background}
 \section{Request-Response Protocol}
+The Request-Response protocol is a fundamental communication pattern in distributed systems where a client sends a request to a server and waits for a response. This synchronous communication model is characterized by its simplicity and direct interaction between parties, making it suitable for operations requiring immediate feedback and confirmation.
+
 \section{Publish-Subscribe Protocol}
+The Publish-Subscribe (Pub/Sub) protocol is an asynchronous messaging pattern where senders (publishers) categorize messages into topics without knowledge of the receivers (subscribers). Subscribers express interest in specific topics and receive messages published to those topics. This decoupled architecture enables scalable and flexible communication in distributed systems.
+
 \subsection{MQTT}
+MQTT (Message Queuing Telemetry Transport) is a lightweight, open-source messaging protocol designed for constrained devices and low-bandwidth, high-latency networks. It implements the publish-subscribe pattern over TCP/IP, providing three quality of service levels for message delivery and supporting various security features.
+
 \subsection{LA-MQTT}
+LA-MQTT (Location-Aware MQTT) extends the standard MQTT protocol by incorporating location-based features. It enables spatial queries and location-aware message routing, making it particularly suitable for IoT applications requiring geographical context in message distribution.
+
 \section{Universal Location Referencing}
+Universal Location Referencing provides standardized methods for encoding and representing geographical locations. These systems ensure consistent and unambiguous location representation across different applications and platforms.
+
 \subsection{Cantor Pairing}
+Cantor Pairing is a mathematical technique that uniquely maps two natural numbers to a single natural number. This bijective function is particularly useful in computer science for combining two coordinates into a single value while maintaining the ability to recover the original coordinates.
+
 \subsection{MGRS}
+The Military Grid Reference System (MGRS) is a geocoordinate system used by NATO militaries for locating points on Earth. It provides a concise way to represent locations using a combination of letters and numbers, offering high precision and ease of use in military and civilian applications.
+
 \section{Space Filling Curves}
+Space Filling Curves are mathematical curves that pass through every point in a multi-dimensional space. They provide a way to map multi-dimensional data to a single dimension while preserving spatial locality, making them valuable for spatial indexing and data organization.
+
 \section{Privacy Preserving}
+Privacy Preserving techniques ensure the protection of sensitive information while allowing necessary computations and data processing. These methods are crucial in maintaining confidentiality in distributed systems and data analysis.
+
 \subsection{Homomorphic Encryption}
+Homomorphic Encryption is a form of encryption that allows specific types of computations to be performed on ciphertext, producing an encrypted result that, when decrypted, matches the result of operations performed on the plaintext.
+
 \subsubsection{Fully Homomorphic Encryption}
+Fully Homomorphic Encryption (FHE) enables arbitrary computations on encrypted data without decryption. It allows for complex operations while maintaining data privacy, though it comes with significant computational overhead.
+
 \subsubsection{Partially Homomorphic Encryption}
+Partially Homomorphic Encryption (PHE) supports specific types of operations (like addition or multiplication) on encrypted data. While more limited than FHE, it offers better performance and is suitable for applications requiring specific mathematical operations.
+
 \section{Usage of HE for Matching}
+Homomorphic Encryption can be applied to matching problems, allowing secure computation of relationships between encrypted data points while maintaining privacy.
+
 \subsection{Distance Calculation}
+Distance calculation using Homomorphic Encryption enables secure computation of distances between encrypted coordinates, crucial for location-based services that need to maintain user privacy.
+
 \subsection{Parkings Availability}
+The application of Homomorphic Encryption to parking availability systems allows for secure matching between user locations and available parking spots while protecting the privacy of both users and parking infrastructure.
+
 \subsection{PHE and FHE Implications}
+The choice between Partially and Fully Homomorphic Encryption has significant implications for system performance, security, and functionality. PHE offers better performance but limited operations, while FHE provides full computational capabilities at the cost of higher computational overhead.
 
 \chapter{System Architecture}
 \section{System Overview}
