@@ -180,17 +180,37 @@ Universal Location Referencing provides standardized methods for encoding and re
 \subsection{Cantor Pairing}
 Cantor Pairing is a mathematical technique that uniquely maps two natural numbers to a single natural number. This bijective function is particularly useful in computer science for combining two coordinates into a single value while maintaining the ability to recover the original coordinates.
 
+More formally, the Cantor pairing function is defined as:
+\[
+    \pi(x, y) = \frac{(x + y)(x + y + 1)}{2} + y
+\]
+
 \subsection{MGRS}
 The Military Grid Reference System (MGRS) is a geocoordinate system used by NATO militaries for locating points on Earth. It provides a concise way to represent locations using a combination of letters and numbers, offering high precision and ease of use in military and civilian applications.
 
 \section{Space Filling Curves}
 Space Filling Curves are mathematical curves that pass through every point in a multi-dimensional space. They provide a way to map multi-dimensional data to a single dimension while preserving spatial locality, making them valuable for spatial indexing and data organization.
 
+The most common space-filling curves include:
+\begin{itemize}
+    \item \textbf{Hilbert Curve}
+    \item \textbf{Z-order Curve}
+\end{itemize}
+
+The Hilbert Curve is particularly notable for its ability to preserve locality, meaning that points that are close in multi-dimensional space remain close in the one-dimensional representation.
+
+On the other hand, the Z-order Curve, preserve the order of positions in a grid-like manner, making it suitable for applications requiring efficient spatial queries. Thus, it's possible to reduce the problem of finding matching points into finding the maximum prefix of two strings.
+
 \section{Privacy Preserving}
-Privacy Preserving techniques ensure the protection of sensitive information while allowing necessary computations and data processing. These methods are crucial in maintaining confidentiality in distributed systems and data analysis.
+Privacy Preserving techniques ensure the protection of sensitive information while allowing necessary computations and data processing. These methods are crucial in maintaining confidentiality in distributed systems and data analysis. For example, in the context of location-based services, privacy-preserving techniques allow for the sharing of location data without revealing exact coordinates, thus protecting user privacy.
 
 \subsection{Homomorphic Encryption}
 Homomorphic Encryption is a form of encryption that allows specific types of computations to be performed on ciphertext, producing an encrypted result that, when decrypted, matches the result of operations performed on the plaintext.
+
+Let's denote \( \xi_k \) as the encryption function, \( \xi_k^{-1} \) as the decryption function, and \( f \) as a function that can be computed on plaintexts. Homomorphic Encryption satisfies the property:
+\[
+    \xi_k(f(x)) = f(\xi_k(x))
+\]
 
 \subsubsection{Fully Homomorphic Encryption}
 Fully Homomorphic Encryption (FHE) enables arbitrary computations on encrypted data without decryption. It allows for complex operations while maintaining data privacy, though it comes with significant computational overhead.
