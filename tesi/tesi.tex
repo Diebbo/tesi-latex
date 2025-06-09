@@ -1,10 +1,14 @@
 \documentclass[12pt,a4paper,twoside]{book}
 
 
-\usepackage[utf8]{inputenc}
+% \usepackage[utf8]{inputenc}
 \usepackage[a4paper,inner=3.5cm,outer=2.5cm]{geometry}
 
 \usepackage[titletoc,title,toc,page]{appendix}
+
+\usepackage{amsmath}
+\usepackage{unicode-math}
+
 \usepackage{verbatim}
 \usepackage{placeins}
 \usepackage{listings}
@@ -21,7 +25,7 @@
 \usepackage{newlfont}
 \usepackage{fancyhdr}
 \usepackage{indentfirst}
-\usepackage[utf8]{inputenc}
+% \usepackage[utf8]{inputenc}
 \usepackage{float}
 \usepackage{hyperref}
 \usepackage[capitalize,noabbrev]{cleveref}
@@ -280,10 +284,10 @@ The length of the common prefix determines the size of the smallest bounding box
 
 For example, consider two points with Z-order encodings:
 \begin{align*}
-    Z_1 &= 1100_2 \\
-    Z_2 &= 1110_2
+    Z_1 &= 3310_4 \\
+    Z_2 &= 3312_4
 \end{align*}
-The maximum common prefix is \( 110_2 \), indicating that these points share the same region at the third level of the Z-order curve.
+The maximum common prefix is \( 331_4 \), indicating that these points share the same region in the first three orders of the encoded space. We used base 4 because it's the easiest way to visualize which of the four quadrants the point belongs to, as each digit represents a quadrant in a two-dimensional space.
 
 This prefix-based approach can be extended to handle range queries by:
 \begin{enumerate}
@@ -295,7 +299,7 @@ This prefix-based approach can be extended to handle range queries by:
 The efficiency of this approach comes from the fact that we can perform these operations using simple bitwise operations, making it suitable for real-time applications.
 
 \subsubsection{Privacy-Preserving Z-order Queries}
-When implementing privacy-preserving location queries using Z-order encoding, we can employ homomorphic encryption to protect sensitive location data. Let's consider a scenario where a user \( A \) wants to share their location with user \( B \) while maintaining privacy:
+When implementing privacy-preserving location queries using Z-order encoding, we can employ homomorphic encryption to protect sensitive location data \cite{zhang2020privacy}. Let's consider a scenario where a user \( A \) wants to share their location with user \( B \) while maintaining privacy:
 
 \begin{itemize}
     \item Let \( QK_A \) be the QuadKey representation of \( A \)'s location
@@ -303,7 +307,7 @@ When implementing privacy-preserving location queries using Z-order encoding, we
     \item The service provider (SP) performs homomorphic multiplication: \( QK_A \otimes M_B \)
 \end{itemize}
 
-To ensure unambiguous results, we increment each value in \( qk_i \in QK_A \) by one before encryption, such that \( qk_i \in \{1,2,3,4\} \). In this scheme:
+To ensure unambiguous results, we increment each value in \( qk_i \in QK_A \) by one before encryption, such that \( qk_i \in \{1,2,3,4\} \). In this scheme \cite{zhang2020privacy}:
 \begin{itemize}
     \item A bit mask value of 1 preserves the location data
     \item A bit mask value of 0 masks the location data
