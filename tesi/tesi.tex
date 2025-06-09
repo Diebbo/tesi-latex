@@ -178,6 +178,14 @@ HTTPS is a version of HTTP built on the SSL/TLS protocol, providing secure commu
 
 One of the key features of HTTPS is its use of certificates to authenticate the server, ensuring that clients are communicating with the intended entity. This is possible through a relatively high usage of computational resources, which is a trade-off for the enhanced security it provides.
 
+\subsection{Reuqest-Response in IoT devices}
+HTTPS is a commonly used choice also for IoT devices. However, its usability is often limited due to a number of factors:
+\begin{itemize}
+    \item \textbf{Resource Constraints\cite{mazhar2023iotsecurity}}: Encrypting and decrypting certificates standards (RSA, EEC, AES) can be computationally expensive, which is a significant concern for IoT devices with limited processing power and memory.
+    \item \textbf{Lack of Secure Firmware Updates\cite{cyberark2024iot}}: Many IoT devices do not support secure firmware updates, making it difficult to patch vulnerabilities in the HTTPS implementation.
+    \item \textbf{Weak or Nonexistent Certificate Validation\cite{bishopfox2020weakcertificates}}: Many IoT devices do not validate server certificates properly, leading to potential
+\end{itemize}
+
 \section{Publish-Subscribe Protocol}
 The Publish-Subscribe (Pub/Sub) protocol is an asynchronous messaging pattern where senders (publishers) categorize messages into topics without knowledge of the receivers (subscribers). Subscribers express interest in specific topics and receive messages published to those topics. This decoupled architecture enables scalable and flexible communication in distributed systems.
 
@@ -490,12 +498,11 @@ Se non ti piace lo stile di citazione puoi modificarlo sopra dove scrivo usepack
 
 
 \renewcommand{\bibsection}{}
-\chapter*{Riferimenti bibliografici}
+\chapter*{References}
 \bibliography{refs}
 \newpage
 
-\renewcommand{\appendixtocname}{Appendici}
-\renewcommand{\appendixpagename}{Appendici}
+\renewcommand{\appendixtocname}{Appendices}
 % \csname @openrightfalse\endcsname
 \pagenumbering{gobble}
 
