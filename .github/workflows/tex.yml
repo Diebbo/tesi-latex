@@ -25,6 +25,7 @@ jobs:
         with:
           root_file: tesi/tesi.tex
           work_in_root_file_dir: true
+          compiler: lualatex
       - name: Generate build artifact
         uses: actions/upload-artifact@main
         with:
