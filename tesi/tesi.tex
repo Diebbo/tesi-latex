@@ -75,7 +75,7 @@
 \vspace{3mm}
 {\Huge{\bf Applications on Privacy Preserving }}\\
 \vspace{3mm}
-{\Huge{\bf Protocols}
+{\Huge{\bf Protocols}}
 
 \end{center}
 
@@ -166,6 +166,14 @@ Abstract qui (ti consiglio di farlo alla fine)
 \section{Request-Response Protocol}
 The Request-Response protocol is a fundamental communication pattern in distributed systems where a client sends a request to a server and waits for a response. This synchronous communication model is characterized by its simplicity and direct interaction between parties, making it suitable for operations requiring immediate feedback and confirmation.
 
+\subsection{HTTP}
+HTTP (Hypertext Transfer Protocol) is the foundation of data communication on the World Wide Web. It operates as a request-response protocol, allowing clients to request resources from servers and receive responses. HTTP supports various methods (GET, POST, PUT, DELETE) for different types of operations and is extensible through headers and status codes.
+
+\subsubsection{HTTPS}
+HTTPS is a version of HTTP built on the SSL/TLS protocol, providing secure communication over a computer network. It encrypts data exchanged between clients and servers, ensuring confidentiality and integrity. HTTPS is essential for protecting sensitive information, such as login credentials and financial transactions, from eavesdropping and tampering.
+
+One of the key features of HTTPS is its use of certificates to authenticate the server, ensuring that clients are communicating with the intended entity. This is possible through a relatively high usage of computational resources, which is a trade-off for the enhanced security it provides.
+
 \section{Publish-Subscribe Protocol}
 The Publish-Subscribe (Pub/Sub) protocol is an asynchronous messaging pattern where senders (publishers) categorize messages into topics without knowledge of the receivers (subscribers). Subscribers express interest in specific topics and receive messages published to those topics. This decoupled architecture enables scalable and flexible communication in distributed systems.
 
@@ -186,21 +194,123 @@ More formally, the Cantor pairing function is defined as:
     \pi(x, y) = \frac{(x + y)(x + y + 1)}{2} + y
 \]
 
-\subsection{MGRS}
-The Military Grid Reference System (MGRS) is a geocoordinate system used by NATO militaries for locating points on Earth. It provides a concise way to represent locations using a combination of letters and numbers, offering high precision and ease of use in military and civilian applications.
-
 \section{Space Filling Curves}
 Space Filling Curves are mathematical curves that pass through every point in a multi-dimensional space. They provide a way to map multi-dimensional data to a single dimension while preserving spatial locality, making them valuable for spatial indexing and data organization.
 
 The most common space-filling curves include:
 \begin{itemize}
-    \item \textbf{Hilbert Curve}
     \item \textbf{Z-order Curve}
+    \item \textbf{Hilbert Curve}
 \end{itemize}
+
+\vspace{5mm}
+
+\begin{center}
+
+\includegraphics[width=6.5cm,height=4.7cm]{img/hilbert-z-order.jpg}
+
+\end{center}
+
+\vspace{5mm}
 
 The Hilbert Curve is particularly notable for its ability to preserve locality, meaning that points that are close in multi-dimensional space remain close in the one-dimensional representation.
 
-On the other hand, the Z-order Curve, preserve the order of positions in a grid-like manner, making it suitable for applications requiring efficient spatial queries. Thus, it's possible to reduce the problem of finding matching points into finding the maximum prefix of two strings.
+On the other hand, the Z-order Curve, preserve the order of positions in a grid-like manner, making it suitable for applications requiring efficient spatial queries. Thus, it's possible to reduce the problem of finding matching points into finding the maximum prefix of two bit strings.
+
+\subsection{Z-order Curve}
+As mentioned, the Z-order curve is one of the most widely used space-filling curves. It maps multi-dimensional data into a single dimension, similar to the Cantor encoding function. Conversly, it has some some useful properties, when applied to spacial data, such as preserving locality and allowing efficient range queries.
+
+\subsubsection{Z-order Encoding}
+
+The encoding process for Z-order involves interleaving the bits of the coordinates of a point in a multi-dimensional space. For example, given a point with coordinates \( (x, y) \), the Z-order encoding can be represented as:
+\[
+    Z(x, y) = \sum_{i=0}^{n} (x_i \cdot 2^{2i} + y_i \cdot 2^{2i+1})
+\]
+
+Where:
+\begin{itemize}
+    \item \( x_i \) and \( y_i \) are the bits of the binary representation of the coordinates \( x \) and \( y \).
+    \item \( n \) is the number of bits used to represent each coordinate.
+\end{itemize}
+
+\subsubsection{Z-order Decoding}
+The decoding process retrieves the original coordinates from the Z-order encoded value. Given a Z-order value \( Z \), the decoding can be performed by extracting the bits corresponding to each coordinate:
+\[
+    x = \sum_{i=0}^{n} (Z \pmod{ 2^{2i+2} }) \cdot 2^i
+\]
+Where:
+\begin{itemize}
+    \item \( Z \pmod{ 2^{2i+2} } \) extracts the bits corresponding to the \( i \)-th coordinate.
+    \item The result is then shifted and combined to reconstruct the original coordinate \( x \).
+\end{itemize}
+
+\subsubsection{Z-order Querying}
+Let's consider a scenario where we want to find all points within a specific range in a two-dimensional space. We define \( P \) as the set of points in the space, and we want to find all points \( p \in P \) such that:
+\[
+    p.x \in [x_{min}, x_{max}] \quad \text{and} \quad p.y \in [y_{min}, y_{max}]
+\]
+
+We can leverage the Z-order encoding to efficiently query this range. This is possible by calculating the order of the encoding that we want to find. 
+By definition we can represent the GPS coordinates of a point \( (x_p, y_p) \) into a point \( p \). This point will be represented in the space of \( n \) orders \( \in \mathbb{Z}_4 \).
+
+\subsubsection{Maximum Common Prefix Search}
+A key operation in Z-order based spatial queries is finding the maximum common prefix between two Z-order encoded values. This operation is fundamental for determining spatial relationships between points.
+
+Given two Z-order encoded values \( Z_1 \) and \( Z_2 \), we can find their maximum common prefix by:
+\begin{enumerate}
+    \item Converting both values to their binary representation
+    \item Comparing the bits from left to right
+    \item Stopping at the first position where the bits differ
+\end{enumerate}
+
+The length of the common prefix determines the size of the smallest bounding box that contains both points. This property is particularly useful for:
+\begin{itemize}
+    \item Finding the smallest region containing multiple points
+    \item Determining if points are within a certain distance of each other
+    \item Optimizing spatial range queries
+\end{itemize}
+
+For example, consider two points with Z-order encodings:
+\begin{align*}
+    Z_1 &= 1100_2 \\
+    Z_2 &= 1110_2
+\end{align*}
+The maximum common prefix is \( 110_2 \), indicating that these points share the same region at the third level of the Z-order curve.
+
+This prefix-based approach can be extended to handle range queries by:
+\begin{enumerate}
+    \item Encoding the query range boundaries
+    \item Finding the maximum common prefix of the range
+    \item Generating all possible Z-order values that share this prefix
+\end{enumerate}
+
+The efficiency of this approach comes from the fact that we can perform these operations using simple bitwise operations, making it suitable for real-time applications.
+
+\subsubsection{Privacy-Preserving Z-order Queries}
+When implementing privacy-preserving location queries using Z-order encoding, we can employ homomorphic encryption to protect sensitive location data. Let's consider a scenario where a user \( A \) wants to share their location with user \( B \) while maintaining privacy:
+
+\begin{itemize}
+    \item Let \( QK_A \) be the QuadKey representation of \( A \)'s location
+    \item Let \( M_B \) be the bit mask specified by \( A \) for user \( B \)
+    \item The service provider (SP) performs homomorphic multiplication: \( QK_A \otimes M_B \)
+\end{itemize}
+
+To ensure unambiguous results, we increment each value in \( qk_i \in QK_A \) by one before encryption, such that \( qk_i \in \{1,2,3,4\} \). In this scheme:
+\begin{itemize}
+    \item A bit mask value of 1 preserves the location data
+    \item A bit mask value of 0 masks the location data
+\end{itemize}
+
+After decryption on the client device, we:
+\begin{enumerate}
+    \item Remove any zero values
+    \item Convert the elements back to \( \mathbb{Z}_4 \)
+    \item Generate a masked QuadKey string that produces a bounding box with the desired level of detail
+\end{enumerate}
+
+This approach is computationally efficient as it requires only one round of homomorphic multiplication. The resulting bounding box effectively hides both precise locations and movement patterns, providing privacy even against colluding users.
+
+For example, given a precise GPS coordinate \( (43.084451, -77.680069) \), the system can generate bounding boxes of varying sizes based on the privacy preferences (where \( d \) represents the level of detail). This ensures that location data is shared at an appropriate granularity while maintaining user privacy.
 
 \section{Privacy Preserving}
 Privacy Preserving techniques ensure the protection of sensitive information while allowing necessary computations and data processing. These methods are crucial in maintaining confidentiality in distributed systems and data analysis. For example, in the context of location-based services, privacy-preserving techniques allow for the sharing of location data without revealing exact coordinates, thus protecting user privacy.
