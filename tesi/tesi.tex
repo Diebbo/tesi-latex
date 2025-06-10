@@ -5,7 +5,8 @@
 \usepackage[a4paper,inner=3.5cm,outer=2.5cm]{geometry}
 
 \usepackage[titletoc,title,toc,page]{appendix}
-
+\usepackage{tabularx}
+\usepackage{array}
 \usepackage{amsmath}
 \usepackage{unicode-math}
 
@@ -66,12 +67,12 @@
 \vspace{10mm}
 
 % \large is 12pt
-{\large{\bf{Dipartimento di Scienze e Ingegneria informatica}}} 
+{\large{\bf{Computer Science and Computer Engeneering Department}}} 
 
 \vspace{5mm}
 
 % \Large is 14.4pt
-{\Large{\bf{Corso di Laurea in Informatica}}}
+{\Large{\bf{Computer Science Course}}}
 
 \vspace{15mm}
 
@@ -183,7 +184,7 @@ HTTPS is a commonly used choice also for IoT devices. However, its usability is 
 \begin{itemize}
     \item \textbf{Resource Constraints\cite{mazhar2023iotsecurity}}: Encrypting and decrypting certificates standards (RSA, EEC, AES) can be computationally expensive, which is a significant concern for IoT devices with limited processing power and memory.
     \item \textbf{Lack of Secure Firmware Updates\cite{cyberark2024iot}}: Many IoT devices do not support secure firmware updates, making it difficult to patch vulnerabilities in the HTTPS implementation.
-    \item \textbf{Weak or Nonexistent Certificate Validation\cite{bishopfox2020weakcertificates}}: Many IoT devices do not validate server certificates properly, leading to potential
+    \item \textbf{Weak or Nonexistent Certificate Validation\cite{bishopfox2020weakcertificates}}: Many IoT devices do not validate server certificates properly, leading to potential vulnerabilities.
 \end{itemize}
 
 \section{Publish-Subscribe Protocol}
@@ -192,8 +193,41 @@ The Publish-Subscribe (Pub/Sub) protocol is an asynchronous messaging pattern wh
 \subsection{MQTT}
 MQTT (Message Queuing Telemetry Transport) is a lightweight, open-source messaging protocol designed for constrained devices and low-bandwidth, high-latency networks. It implements the publish-subscribe pattern over TCP/IP, providing three quality of service levels for message delivery and supporting various security features.
 
+The protocol defines three main network entities:
+\begin{itemize}
+    \item \textbf{Message Broker}: The central component that manages message routing between publishers and subscribers. It receives messages from publishers and forwards them to subscribers based on their subscriptions.
+    \item \textbf{Publisher}: A client that sends messages to the broker on specific topics. 
+    \item \textbf{Subscriber}: A client that expresses interest in specific topics and receives messages published to those topics by the broker.
+\end{itemize}
+
 \subsection{LA-MQTT}
 LA-MQTT (Location-Aware MQTT) extends the standard MQTT protocol by incorporating location-based features. It enables spatial queries and location-aware message routing, making it particularly suitable for IoT applications requiring geographical context in message distribution.
+
+The protocol is first intruduced with the purpose of resolving the limitations of traditional MQTT in handling location-based data\cite{montori2022lamqtt}.
+
+\begin{table}[h]
+\begin{tabularx}{\linewidth}{|l|X|X|l|X|}  % X columns will auto-adjust
+\hline
+\textbf{API} & \textbf{Subject} & \textbf{MQTT OP} & \textbf{Topic} & \textbf{Payload} \\ \hline
+Position publish & MC & Publish & GPS\_DATA & $\{position: ( P_i )\}$ \\ \hline
+Topic subscription & MC & Subscribe & $C(i, t_s)$ & * \\ \cline{2-5}
+ & MC & Publish & MC\_SUB & $\{ mc: i, topic: t_s \}$ \\ \hline
+Geofence publish & LDS & Publish & GEOFENCE\_DATA & $\{topic: t_s, content: c_s, region: g_s, event: e_s\}$ \\ \hline
+Content publish & Backend & Publish & $C(i, t_s)$ & $\{content: c_s\}$ \\ \hline
+\end{tabularx}
+\caption{The LA-MQTT Publish-subscribe Operations}
+\label{table:la-mqtt}
+\end{table}
+
+The table \ref{table:la-mqtt} summarizes the main operations of the LA-MQTT protocol, highlighting the interactions between clients (MC), location data sources (LDS), and the backend system.
+
+Those operations include:
+\begin{itemize}
+    \item \textbf{Position Publish}: MC publish their GPS data to the broker, allowing other clients to receive updates on their positions.
+    \item \textbf{Topic Subscription}: MCs subscribe to specific topics, enabling them to receive messages related to their areas of interest.
+    \item \textbf{Geofence Publish}: LDSs publish geofence data, which includes the topic, content, region, and event associated with the geofence.
+    \item \textbf{Content Publish}: The backend publishes content related to the subscribed topics, forwarding it to the subscribed MCs.
+\end{itemize}
 
 \section{Universal Location Referencing}
 Universal Location Referencing provides standardized methods for encoding and representing geographical locations. These systems ensure consistent and unambiguous location representation across different applications and platforms.
@@ -491,7 +525,6 @@ Ti consiglio di metterle sempre almeno a figure. immagini e capitoli.
 Per riferirti a qualcosa basta fare ref seguito dal nome della label, ad esempio ``vedi capitolo \ref{chap:intro}''.\\In questo modo dal pdf cliccando sulla reference, ti porta direttamente al punto giusto.
 Altri pacchetti come \texttt{fancyref} e \texttt{cleveref} (consigliato) possono aiutare nell'automatizzare la creazione delle refrence. Usando ad esempio \texttt{\cref{chap:intro}} viene generata la dicitura corrispondete all'elemento a cui si fa riferimento, seguita dalla numerazione. Eccone un esempio: \cref{chap:intro}.
 \section{citazioni}
-Per citare si usa cite seguito dal nome dell'articolo nel file.bib, ad esempio ``come visto nell'articolo di tizio\cite{greenwade93}''.
 
 Se non ti piace lo stile di citazione puoi modificarlo sopra dove scrivo usepackage natbib, ma quello impostato attualmente dovrebbe andare bene.
 
