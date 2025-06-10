@@ -175,7 +175,7 @@ The Request-Response protocol is a fundamental communication pattern in distribu
 HTTP (Hypertext Transfer Protocol) is the foundation of data communication on the World Wide Web. It operates as a request-response protocol, allowing clients to request resources from servers and receive responses. HTTP supports various methods (GET, POST, PUT, DELETE) for different types of operations and is extensible through headers and status codes.
 
 \subsubsection{HTTPS}
-HTTPS is a version of HTTP built on the SSL/TLS protocol, providing secure communication over a computer network. It encrypts data exchanged between clients and servers, ensuring confidentiality and integrity. HTTPS is essential for protecting sensitive information, such as login credentials and financial transactions, from eavesdropping and tampering.
+HTTPS is a version of HTTP built on the SSL/TLS protocol, providing secure communication over a computer network. It encrypts data exchanged between clients and servers, ensuring confidentiality and integrity. HTTPS is essential for protecting sensitive information from eavesdropping and tampering.
 
 One of the key features of HTTPS is its use of certificates to authenticate the server, ensuring that clients are communicating with the intended entity. This is possible through a relatively high usage of computational resources, which is a trade-off for the enhanced security it provides.
 
@@ -309,17 +309,12 @@ Let's consider a scenario where we want to find all points within a specific ran
 \]
 
 We can leverage the Z-order encoding to efficiently query this range. This is possible by calculating the order of the encoding that we want to find. 
-By definition we can represent the GPS coordinates of a point \( (x_p, y_p) \) into a point \( p \). This point will be represented in the space of \( n \) orders \( \in \mathbb{Z}_4 \).
+By definition we can represent the GPS coordinates of a point \( (x_p, y_p) \) into a point \( e_p \). This point will be represented in the space of \( n \) orders, each contained in \( \mathbb{Z}_4 \).
 
 \subsubsection{Maximum Common Prefix Search}
-A key operation in Z-order based spatial queries is finding the maximum common prefix between two Z-order encoded values. This operation is fundamental for determining spatial relationships between points.
+A key operation in Z-order based spatial queries is finding the maximum common prefix between two Z-order encoded values. This operation is fundamental for determinating spatial relationships between points.
 
-Given two Z-order encoded values \( Z_1 \) and \( Z_2 \), we can find their maximum common prefix by:
-\begin{enumerate}
-    \item Converting both values to their binary representation
-    \item Comparing the bits from left to right
-    \item Stopping at the first position where the bits differ
-\end{enumerate}
+Given two Z-order encoded values \( Z_1 \) and \( Z_2 \), we can find the maximum common prefix by following three steps. Firstly, we convert both values to their binary representation. Then, we compare the bits from left to right, stopping at the first position where the bits differ. Finally, we extract the common prefix up to that point. The cited algorithm shows that in the worst case, the maximum common prefix can be found in \( O(n) \) time, where \( n \) is the number of bits in the Z-order encoding.
 
 The length of the common prefix determines the size of the smallest bounding box that contains both points. This property is particularly useful for:
 \begin{itemize}
@@ -343,6 +338,35 @@ This prefix-based approach can be extended to handle range queries by:
 \end{enumerate}
 
 The efficiency of this approach comes from the fact that we can perform these operations using simple bitwise operations, making it suitable for real-time applications.
+
+
+\section{Privacy Preserving}
+Privacy Preserving techniques ensure the protection of sensitive information while allowing necessary computations and data processing. These methods are crucial in maintaining confidentiality in distributed systems and data analysis. For example, in the context of location-based services, privacy-preserving techniques allow for the sharing of location data without revealing exact coordinates, thus protecting user privacy.
+
+\subsection{Homomorphic Encryption}
+Homomorphic Encryption(HE) is a form of encryption that allows specific types of computations to be performed on ciphertext, producing an encrypted result that, when decrypted, matches the result of operations performed on the plaintext.
+
+Let's denote \( \xi_k \) as the encryption function, \( \xi_k^{-1} \) as the decryption function, and \( f \) as a function that can be computed on plaintexts. Homomorphic Encryption satisfies the property:
+\[
+    \xi_k(f(x)) = f(\xi_k(x))
+\]
+
+\subsubsection{Fully Homomorphic Encryption}
+Fully Homomorphic Encryption (FHE) enables arbitrary computations on encrypted data without decryption. It allows for complex operations while maintaining data privacy, although it comes with significant computational overhead.
+
+\subsubsection{Partially Homomorphic Encryption}
+Partially Homomorphic Encryption (PHE) supports only specific types of operations (like addition or multiplication) on encrypted data. While more limited than FHE, it offers better performance and is feasible for applications requiring specific mathematical operations.
+
+\section{Usage of HE for Matching}
+Homomorphic Encryption can be used to securely match location. To archive this, we can use different techniques such as:
+\begin{itemize}
+    \item \textbf{Distance Calculation}: It is archived by tweeking the distance calculation algorithms (e.g., Euclidean distance, Cosine similarity, Manhattan Distance) to work with encrypted coordinates. The main limit comes with the constraint that the operations must be compatible with the encryption scheme used. For instance, calculating the squared Euclidean distance between two points \( (x_1, y_1) \) and \( (x_2, y_2) \) can be expressed as:
+    \[
+        d^2 = (x_1 - x_2)^2 + (y_1 - y_2)^2
+    \]
+    That can be computed homomorphically, and then decrypted before computing the square root to get the actual distance.
+    \item \textbf{Encoding Coordinates}: By encoding coordinates into a grid-like structure, we can reduce the problem into finding two different points sharing the same area-encoding. This apporach comes with some limitations, mainly related to the precision of the approximation and the size of the grid. Still, it allows for efficient matching of points within a specific area without revealing their exact coordinates.
+\end{itemize}
 
 \subsubsection{Privacy-Preserving Z-order Queries}
 When implementing privacy-preserving location queries using Z-order encoding, we can employ homomorphic encryption to protect sensitive location data \cite{zhang2020privacy}. Let's consider a scenario where a user \( A \) wants to share their location with user \( B \) while maintaining privacy:
@@ -370,34 +394,10 @@ This approach is computationally efficient as it requires only one round of homo
 
 For example, given a precise GPS coordinate \( (43.084451, -77.680069) \), the system can generate bounding boxes of varying sizes based on the privacy preferences (where \( d \) represents the level of detail). This ensures that location data is shared at an appropriate granularity while maintaining user privacy.
 
-\section{Privacy Preserving}
-Privacy Preserving techniques ensure the protection of sensitive information while allowing necessary computations and data processing. These methods are crucial in maintaining confidentiality in distributed systems and data analysis. For example, in the context of location-based services, privacy-preserving techniques allow for the sharing of location data without revealing exact coordinates, thus protecting user privacy.
-
-\subsection{Homomorphic Encryption}
-Homomorphic Encryption is a form of encryption that allows specific types of computations to be performed on ciphertext, producing an encrypted result that, when decrypted, matches the result of operations performed on the plaintext.
-
-Let's denote \( \xi_k \) as the encryption function, \( \xi_k^{-1} \) as the decryption function, and \( f \) as a function that can be computed on plaintexts. Homomorphic Encryption satisfies the property:
-\[
-    \xi_k(f(x)) = f(\xi_k(x))
-\]
-
-\subsubsection{Fully Homomorphic Encryption}
-Fully Homomorphic Encryption (FHE) enables arbitrary computations on encrypted data without decryption. It allows for complex operations while maintaining data privacy, though it comes with significant computational overhead.
-
-\subsubsection{Partially Homomorphic Encryption}
-Partially Homomorphic Encryption (PHE) supports specific types of operations (like addition or multiplication) on encrypted data. While more limited than FHE, it offers better performance and is suitable for applications requiring specific mathematical operations.
-
-\section{Usage of HE for Matching}
-Homomorphic Encryption can be applied to matching problems, allowing secure computation of relationships between encrypted data points while maintaining privacy.
-
-\subsection{Distance Calculation}
-Distance calculation using Homomorphic Encryption enables secure computation of distances between encrypted coordinates, crucial for location-based services that need to maintain user privacy.
-
-\subsection{Parkings Availability}
-The application of Homomorphic Encryption to parking availability systems allows for secure matching between user locations and available parking spots while protecting the privacy of both users and parking infrastructure.
-
 \subsection{PHE and FHE Implications}
-The choice between Partially and Fully Homomorphic Encryption has significant implications for system performance, security, and functionality. PHE offers better performance but limited operations, while FHE provides full computational capabilities at the cost of higher computational overhead.
+The choice between Partially and Fully Homomorphic Encryption has significant implications for system performance, security, and functionality. As previously discussed, the two methods used for proximity checks in a location-based scenario require careful consideration of the encryption scheme.
+
+If the requirements only involve checking whether two positions share a common area, leveraging the speed and simplicity of the Z-order approach is recommended. Conversely, if the goal is to compute a precise floating-point distance value, a homomorphically encrypted distance function (e.g., Euclidean distance) may be necessary. However, it is important to note that in this case, the final result may be affected by computational noise inherent to FHE operations.
 
 \chapter{System Architecture}
 \section{System Overview}
