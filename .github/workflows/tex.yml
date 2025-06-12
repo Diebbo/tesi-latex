@@ -20,6 +20,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@main
+      - uses: severgroup-tt/actions-drawio-cli@v0.0.2
+        with:
+          source: tesi/schemes
+          destination: tesi/img
+          format: png
       - name: Compile thesis
         uses: xu-cheng/latex-action@v3
         with:
