@@ -400,7 +400,21 @@ The choice between Partially and Fully Homomorphic Encryption has significant im
 If the requirements only involve checking whether two positions share a common area, leveraging the speed and simplicity of the Z-order approach is recommended. Conversely, if the goal is to compute a precise floating-point distance value, a homomorphically encrypted distance function (e.g., Euclidean distance) may be necessary. However, it is important to note that in this case, the final result may be affected by computational noise inherent to FHE operations.
 
 \chapter{System Architecture}
+In this chapter, we present the system arhcitecture for the proposed privacy-preserving location matching protocol. The main idea is to apply the principles of homomorphic encryption to location-based services, allowing clients to securely publish and query their positions without revealing sensitive information.
+
 \section{System Overview}
+The protocoll is designed to compbine a standard request-response protocol with a publish-subscribe mechanism.
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=8.5cm,height=5.5cm]{img/architecture-scheme.png}
+    \caption{Visualization of the system architecture for the proposed privacy-preserving location matching protocol.}
+    \label{fig:architecture}
+\end{figure}
+
+In order to overcome the high computational cost of homomorphic encryption, the system is designed to use the computational power of a server to perform the just necessary calculations on the data. Then it subdivides to the workers the tasks of computing the distances between the positions of the clients. The workers are able to perform these calculations on encrypted data, thus preserving the privacy of the clients' positions. 
+
 \section{Actors}
 \subsection{LDS}
 \subsection{MC}
