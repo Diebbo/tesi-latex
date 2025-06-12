@@ -413,13 +413,34 @@ The protocoll is designed to compbine a standard request-response protocol with 
     \label{fig:architecture}
 \end{figure}
 
-In order to overcome the high computational cost of homomorphic encryption, the system is designed to use the computational power of a server to perform the just necessary calculations on the data. Then it subdivides to the workers the tasks of computing the distances between the positions of the clients. The workers are able to perform these calculations on encrypted data, thus preserving the privacy of the clients' positions. 
+In order to overcome the high computational cost of homomorphic encryption, the system is designed to use the computational power of a server to perform the just necessary calculations on the data. Then it subdivides to the workers the tasks of computing the distances between the positions of the clients. Thanks to HE properties workers are able to perform these calculations on encrypted data, thus preserving the privacy of the clients' positions. 
 
 \section{Actors}
+
+In our implementation, we have indentified several actors that contribute to the overall functionality of the system.
+
 \subsection{LDS}
+The Location Data Source (LDS), commonly referred to as sensors, are responsible for collecting and publishing location data. In our system, we assume they indipendently publish their data to the broker, based on the event they register. For instance, if a sensor detects a free parking spot, it publishes the information to the broker, that will start the encryption protocol.
+
 \subsection{MC}
+MCs or Mobile Clients are the users of the system. Their main interest is to receive updates on the closest available parking spots, based on their current position. 
+
 \subsection{Broker}
+The Broker (and Backend Server) is the central component of the system, responsible for managing the communication between clients and sensors. It handles and stores the encrypted parking spots data.
+
+\subsection{Proxy}
+The Proxy (Re-encryption) is an intermediary component that facilitate the connection between tlients and the broker.
+
+It utilize the MQTT protocol to manage the comunication with the client. Moreover, it keeps alive the TCP connection with the client(that usually has a natted IP address) and the broker.
+This is accomplished by making the client subscribe to the connection topic, while the proxy publishes the updates to the server about the client requests.
+
+This approach allows the user to have a persistent connection, without the need to maintain a direct TCP connection with the broker. The proxy is also responsible for managing the re-encryption of the data, ensuring that the clients can securely receive updates without exposing their positions.
+
 \subsection{Worker}
+The name Worker refers to a generic computational unit of the system, that can handle tasks from the server, rewarded with a digital currency. In our case, the workers are responsible for computing the distances between the positions of the clients and the parking spots, using the homomorphic encryption scheme. 
+
+The workers's digial reward can be described as a token, that allows them to request tasks from the server. In this way, each client can act as a worker, contributing to the overall computation of the system.
+
 \section{Client}
 \section{Server}
 
