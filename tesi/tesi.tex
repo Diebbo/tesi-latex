@@ -481,7 +481,7 @@ Key Obtain & MC & HTTP GET & Backend & - \\ \hline
 Key publish & MC & HTTP POST & Proxy & $\{keys: \newline [\forall j \in \text{P},\ k_{mc_i, park_j}]\}$ \\ \hline
 Parking Request & Proxy & MQTT Pub & Backend &
 $\{proxy: p_i,\ positions: \newline [\forall j \in \text{P},\ \xi_{mc_i, park_j}(P_i)]\}$ \\ \hline
-Parking Publish & LDS & POST & Backend & $\{\xi_{park_j}(P_j),\newline \text{status} \in \{\text{free}, \text{occ.}\}\}$ \\ \hline
+Parking Publish & LDS & POST & Backend & $\{\xi_{park_j}(P_j), k_{park_j}^+\newline \text{status} \in \{\text{free}, \text{occ.}\}\}$ \\ \hline
 Work Request & Worker & HTTP POST & Backend & - \\ \hline
 Task Finish & Worker & HTTP POST & Backend & $\{worker: w_i,\ task: t_j,\newline result: \xi_{mc_i, park_j}(R)\}$ \\ \hline
 Computation Resoult & Backend & MQTT Pub & Proxy & $\{proxy: p_i,\ resoult: \newline [\forall j \in \text{P},\ \xi_{mc_i, park_j}(R)]\}$ \\ \hline
@@ -496,7 +496,7 @@ Distances Publish & Proxy & MQTT Pub & MC & $\{distances: [\forall j \in \text{P
 \begin{figure}[h]
     \centering
     \includegraphics[width=12cm,height=7.5cm]{img/workflow.png}
-    \caption{Visualization of the protocol flow for the proposed privacy-preserving location matching protocol.}
+    \caption{Visualization of the protocol flow}
     \label{fig:protocol-flow}
 \end{figure}
 
