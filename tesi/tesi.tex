@@ -453,20 +453,24 @@ The HTTP protocol is used for all the traffic arriving to the backend server. Th
 
 \section{Protocol Overview}
 The system is designed to allow the following operations:
+
 \begin{table}[h]
+%\setlength\tabcolsep{3pt}
 \renewcommand{\arraystretch}{1.3}
-\begin{tabularx}{\linewidth}{|l|X|X|X|X|}
+\small
+%\begin{tabularx}{\linewidth}{|l|p{1.6cm}|p{2cm}|p{2cm}|p{4cm}|}
+\begin{tabularx}{\linewidth}{|l|X|X|X|p{4cm}|}
 \hline
-\textbf{API} & \textbf{Subject} & \textbf{SubProtocol} & \textbf{Receiver} & \textbf{Payload} \\ \hline
+\textbf{API} & \textbf{Subject} & \textbf{Protocol} & \textbf{Receiver} & \textbf{Payload} \\ \hline
 Position Publish & MC & MQTT Sub & Proxy & $\{position: \xi_{mc}( P_i )\}$ \\ \hline
 Key Obtain & MC & HTTP GET & Backend & - \\ \hline
-Key publish & MC & HTTP POST & Proxy & $\{keys: [\forall j \in \text{Parkings},\ k_{mc_i, park_j}]\}$ \\ \hline
+Key publish & MC & HTTP POST & Proxy & $\{keys: \newline [\forall j \in \text{P},\ k_{mc_i, park_j}]\}$ \\ \hline
 Parking Request & Proxy & MQTT Pub & Backend &
-$\{proxy: p_i,\ positions: [\forall j \in \text{Parkings},\ \xi_{mc_i, park_j}(P_i)]\}$ \\ \hline
-Parking Publish & LDS & POST & Backend & $\{\xi_{park_j}(P_j),\ \text{status} \in \{\text{free}, \text{occ.}\}\}$ \\ \hline
+$\{proxy: p_i,\ positions: \newline [\forall j \in \text{P},\ \xi_{mc_i, park_j}(P_i)]\}$ \\ \hline
+Parking Publish & LDS & POST & Backend & $\{\xi_{park_j}(P_j),\newline \text{status} \in \{\text{free}, \text{occ.}\}\}$ \\ \hline
 Work Request & Worker & HTTP POST & Backend & - \\ \hline
-Task Finish & Worker & HTTP POST & Backend & $\{worker: w_i,\ task: t_j,\ result: \xi_{mc_i, park_j}(R)\}$ \\ \hline
-Computation Resoult & Backend & MQTT Pub & Proxy & $\{proxy: p_i,\ resoult: [\forall j \in \text{Parkings},\ \xi_{mc_i, park_j}(R)]\}$ \\ \hline
+Task Finish & Worker & HTTP POST & Backend & $\{worker: w_i,\ task: t_j,\newline result: \xi_{mc_i, park_j}(R)\}$ \\ \hline
+Computation Resoult & Backend & MQTT Pub & Proxy & $\{proxy: p_i,\ resoult: \newline [\forall j \in \text{P},\ \xi_{mc_i, park_j}(R)]\}$ \\ \hline
 
 \end{tabularx}
 \caption{The System Operations}
