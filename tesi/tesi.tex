@@ -144,6 +144,15 @@
 \end{flushright}
 \newpage~\newpage
 \pagenumbering{gobble}
+
+\newgeometry{
+    left=20mm,
+    right=20mm,
+    top=20mm,
+    bottom=20mm
+}
+
+
 \chapter*{Abstract}
 Abstract qui (ti consiglio di farlo alla fine)
 
@@ -155,13 +164,6 @@ Abstract qui (ti consiglio di farlo alla fine)
 \listoffigures
 \thispagestyle{empty}
 \newpage~\newpage
-
-\newgeometry{
-    left=20mm,
-    right=20mm,
-    top=20mm,
-    bottom=20mm
-}
 
 \pagenumbering{arabic}
 \setcounter{chapter}{-1}
@@ -475,7 +477,7 @@ The HTTP protocol is used for all the traffic arriving and leaving the backend s
 
 Beacause the backend server acts also as a database, it is responsible for storing the encrypted positions of the parking spots, and for managing the requests from the clients. Thus, it provides an HTTP API for the clients to interact with the system. 
 
-\newpage
+%\newpage
 
 \section{Protocol Overview}
 The system is designed to allow the following operations:
@@ -527,10 +529,24 @@ We can summarize the protocol flow in the following steps:
     \item Finally, the proxy receives the re-encrypted results, decrypts them using the shared keys, and delivers them to the mobile client $MC_i$.
 \end{enumerate}
 
+\section{Security Considerations}
+
+The main goal of the study is to provide a privacy-preserving location matching protocol, that allows clients to securely publish and query their positions without revealing sensitive information. In order to fulfill this goal, we need to ensure that the system is attack-resistant and that the privacy of the clients is preserved.
+
+In the previous implementation\cite{genova2024helamqtt}, the logic behind the position matching protocol relied on the evaluation of the euclidian distance between the positions of the clients and the parking spots from a trusted CA. This approach, even tought hided from the server the raw positions of the clients, leaked information of the MC. This was accomplished by allowing an attacker to perform a \emph{binary search} of the client position, by sending a series of location requests based on the topics the clients subscribed to. By narrowing down the search space, the attacker could eventually find the exact position of the client, thus compromising its privacy.
+
+This showcased that HE is secure if and only if the encryption & decryption operation are performed correctly, preferably by the client itself.
+
+Another really serious isssue with the Genova's protocol is that that there's no way to ensure that the user is really itself. Moreover, if an attacker is able to read the network traffic, he could easily impersonate the client and send fake position updates to the server, or even worse, apply the previous described attack.
+
+In my own implementation, I addressed those issues by introducing different techniques from the state of the art, such as using a proxy re-encryptor and a position encoding mechanism based on Z-order. The choice of leaving the the decryption operation to the client ensures that no one is able to read the sensitive data, despite an increase of computational resources required to re-encrypt each position for each parking spot.
 
 \chapter{Testing}
+\section{Testing Methodology}
 
-\chapter{Performance Evaluation}
+\section{Performance Evaluation}
+
+\section{Security Analysis}
 
 \chapter{Project}
 \section{Glossary}
