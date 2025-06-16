@@ -491,10 +491,18 @@ Distances Publish & Proxy & MQTT Pub & MC & $\{distances: [\forall j \in \text{P
 \label{table:system-operations}
 \end{table}
 
+\newpage
 \section{Scenario}
-\subsection{Protocol Flow}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=12cm,height=7.5cm]{img/workflow.png}
+    \caption{Visualization of the protocol flow for the proposed privacy-preserving location matching protocol.}
+    \label{fig:protocol-flow}
+\end{figure}
+
 We can summarize the protocol flow in the following steps:
 
+\subsection{Protocol Flow}
 \begin{enumerate}
     \item The mobile client $MC_i$ initiates a public-keys retrieval by invoking the \textbf{Key Obtain} API via an HTTP GET request to the backend server. \emph{(API: \texttt{Key Obtain}, Payload: none) \to Keys: $[\forall p_j \in P, \xi_{p_j^+}]$)}
     \item For each parking spot $park_j$, the client $MC_i$ generates a symmetric translation key $k_{mc_i, park_j}$ and sends the collection to the proxy using the \textbf{Key Publish} API via an HTTP POST request. \emph{(API: \texttt{Key Publish}, Payload: $\{keys: [\forall j \in \text{P},\ k_{mc_i, park_j}]\}$)}
