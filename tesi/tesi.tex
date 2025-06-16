@@ -72,7 +72,7 @@
 \vspace{5mm}
 
 % \Large is 14.4pt
-{\Large{\bf{Corso di Informatica}}
+{\Large{\bf{Corso di Informatica}}}
 
 \vspace{15mm}
 
@@ -80,7 +80,7 @@
 \vspace{3mm}
 {\Huge{\bf Applications on Privacy Preserving }}\\
 \vspace{3mm}
-{\Huge{\bf Protocols}}
+{\Huge{\bf Protocols}} \\
 
 \end{center}
 
@@ -212,7 +212,7 @@ The protocol is first intruduced with the purpose of resolving the limitations o
 Position publish & MC & Publish & GPS\_DATA & $\{position: ( P_i )\}$ \\ \hline
 Topic subscription & MC & Subscribe & $C(i, t_s)$ & * \\ \cline{2-5}
  & MC & Publish & MC\_SUB & $\{ mc: i, topic: t_s \}$ \\ \hline
-Geofence publish & LDS & Publish & GEOFENCE\_DATA & $\{topic: t_s, content: c_s, region: g_s, event: e_s\}$ \\ \hline
+Geofence publish & LDS & Publish & GEOFENCE\_DATA & $\{topic: t_s, content: c_s, $\newline$region: g_s, event: e_s\}$ \\ \hline
 Content publish & Backend & Publish & $C(i, t_s)$ & $\{content: c_s\}$ \\ \hline
 \end{tabularx}
 \caption{The LA-MQTT Publish-subscribe Operations}
@@ -417,8 +417,6 @@ In order to overcome the high computational cost of homomorphic encryption, the 
 
 \section{Actors}
 
-In our implementation, we have indentified several actors that contribute to the overall functionality of the system.
-
 \subsection{LDS}
 The Location Data Source (LDS), commonly referred to as sensors, are responsible for collecting and publishing location data. In our system, we assume they indipendently publish their data to the broker, based on the event they register. For instance, if a sensor detects a free parking spot, it publishes the information to the broker, that will start the encryption protocol.
 
@@ -441,11 +439,36 @@ The name Worker refers to a generic computational unit of the system, that can h
 
 The workers's digial reward can be described as a token, that allows them to request tasks from the server. In this way, each client can act as a worker, contributing to the overall computation of the system.
 
-\section{Client}
-\section{Server}
+\section{Data Flow and Network Protocols}
+\begin{itemize}
+    \item mc encrypts its position using it's key and the public key of the parking
+    \item the proxy receives with the publish event the blob of positions
+    \item the proxy notify the broker with an HTTP POST requests. The body contains the position and translation key for each parking spot.
+    \item the broker who stores the encrypted positions(with the parking private key) devides the working load among the workers. 
+    \item When they receive the task, they make the encrypted operation. After they finish the send the resoult to the backend server.
+    \item it the re-translate the resoult back using the translation key such that the client can receive that.
+    \item the Proxy receives the resoult through the MQTT publish from the server.
+    \item At this point the Proxy forward back the resoult to the client that subscribed to the topic.
+    
+\end{itemize}
+
 
 \chapter{Protocol Design}
 \section{Protocol Overview}
+The system is designed to allow the following operations:
+\begin{table}[h]
+\renewcommand{\arraystretch}{1.3}
+\begin{tabularx}{\linewidth}{|l|X|X|X|X|}  % Cambiato l l finale in X per migliorare l'allineamento
+\hline
+\textbf{API} & \textbf{Subject} & \textbf{SubProtocol} & \textbf{Receiver} & \textbf{Payload} \\ \hline
+Position Publish & MC & MQTT Sub & Proxy & $\{position: \xi_{mc}( P_i )\}$ \\ \hline
+Parking Request & Proxy & MQTT Pub & Broker &
+$\{proxy: p_i,\ positions: [\forall j \in \text{Parkings},\ \xi_{mc_i, park_j}(P_i)]\}$ \\ \hline
+Parking Publish & LDS & POST & Broker & $\{\xi_{park_j}(P_j),\ \text{status} \in \{\text{free}, \text{occ.}\}\}$ \\ \hline
+\end{tabularx}
+\caption{The System Operations}
+\label{table:system-operations}
+\end{table}
 \subsection{Position Publish}
 \subsection{Area Subscription}
 \subsection{Geofence Publish}
