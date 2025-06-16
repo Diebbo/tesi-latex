@@ -429,26 +429,32 @@ The protocoll is designed to compbine a standard request-response protocol with 
     \label{fig:architecture}
 \end{figure}
 
-In order to overcome the high computational cost of homomorphic encryption, the system is designed to use the computational power of a server to perform the just necessary calculations on the data. Then it subdivides to the workers the tasks of computing the distances between the positions of the clients. Thanks to HE properties workers are able to perform these calculations on encrypted data, thus preserving the privacy of the clients' positions. 
+Homomorphic encryption incurs high computational costs, so the system optimizes performance by splitting the workload: the server handles only essential data processing, while workers compute the distances between client positions. Since HE allows computations on encrypted data, this approach preserves the privacy of clients' locations without compromising efficiency.
 
 \section{Actors}
 
 \subsection{LDS}
-The Location Data Source (LDS), commonly referred to as sensors or parkings, are responsible for collecting and publishing location data. In our system, we assume they indipendently publish their data to the broker, based on the event they register. For instance, if a sensor detects a free parking spot, it publishes the information to the broker, that will start the encryption protocol.
+The Location Data Source (LDS), commonly referred to as sensors or parkings, are responsible for collecting and publishing location data. In our system, we assume they indipendently publish their data to the broker, based on the event they register. For instance, if a sensor detects a free parking spot, it publishes the information to the broker, that will start the encryption protocol. This appens also when a parking spot is occupied, allowing the system to keep track of the available parking spots in real-time.
+
+Note that by maintaining the availability of the parking spots, independent from the clients, we can ensure that the system is able to provide privacy-preserving updates to the server. Conversely, if the clients were also responsible for reserving the parking spots, they would need to expose their positions to the server, which would compromise the privacy of the system.
 
 \subsection{MC}
 MCs or Mobile Clients are the users of the system. Their main interest is to receive updates on the closest available parking spots, based on their current position. 
 
-\subsection{Broker}
-The Broker (and Backend Server) is the central component of the system, responsible for managing the communication between clients and sensors. It handles and stores the encrypted parking spots data.
+In our system, the clients responsibilies are very limited, as they do not trust the server and all the other actors involved in the protocol. They only need to publish their position to the server, wait for the computation to finish, and then receive the results.
+
+\subsection{Server}
+The Backend Server (commonly called Information Broker) is the central component of the system, responsible for managing the communication between clients and sensors. It also acts like a database, handling and storing the encrypted parking spots data.
+
+This centralized component is crucial in the architecture, as it allows all sort of mobile actors (including clients and LDs) to have a persistent connection with the system, altough it's not enough if we want to achieve a full zero-knowledge protocol.
 
 \subsection{Proxy}
-The Proxy (Re-encryption) is an intermediary component that facilitate the connection between tlients and the broker.
+The Proxy (Re-encryptor) is an intermediary component that facilitate the connection between clients and the server.
 
-It utilize the MQTT protocol to manage the comunication with the client. Moreover, it keeps alive the TCP connection with the client(that usually has a natted IP address) and the broker.
+It utilize the MQTT protocol to manage the comunication with the client. Moreover, it keeps alive the TCP connection with the client (that usually has a natted IP address) and the broker.
 This is accomplished by making the client subscribe to the connection topic, while the proxy publishes the updates to the server about the client requests.
 
-This approach allows the user to have a persistent connection, without the need to maintain a direct TCP connection with the broker. The proxy is also responsible for managing the re-encryption of the data, ensuring that the clients can securely receive updates without exposing their positions.
+This approach allows the user to have a persistent connection, without the need to maintain a direct TCP connection with the server. The proxy is also responsible for managing the re-encryption of the data, ensuring that the server (and the workers) can compute the calculations on ciphertext encrypted with the right keys.
 
 \subsection{Worker}
 The name Worker refers to a generic computational unit of the system, that can handle tasks from the server, rewarded with a digital currency. In our case, the workers are responsible for computing the distances between the positions of the clients and the parking spots, using the homomorphic encryption scheme. 
