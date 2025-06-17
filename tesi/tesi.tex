@@ -403,6 +403,8 @@ This approach is computationally efficient as it requires only one round of homo
 
 For example, given a precise GPS coordinate \( (43.084451, -77.680069) \), the system can generate bounding boxes of varying sizes based on the privacy preferences (where \( d \) represents the level of detail). This ensures that location data is shared at an appropriate granularity while maintaining user privacy.
 
+% TODO: add other type of queries
+
 \subsection{PHE and FHE Implications}
 The choice between Partially and Fully Homomorphic Encryption has significant implications for system performance, security, and functionality. As previously discussed, the two methods used for proximity checks in a location-based scenario require careful consideration of the encryption scheme.
 
@@ -458,6 +460,9 @@ This is accomplished by making the client subscribe to the connection topic, whi
 
 This approach allows the user to have a persistent connection, without the need to maintain a direct TCP connection with the server. The proxy is also responsible for managing the re-encryption of the data, ensuring that the server (and the workers) can compute the calculations on ciphertext encrypted with the right keys.
 
+\subsection{Certification Authority}
+The certification authority (CA) is a trusted entity responsible for managing the public keys of the clients and the public/private keys of the parking spots. Because he is a trusted entity, the CA knows the private keys of the parking spots. Thus, it can generate the symmetric translation keys required for a secure computation of the client distances without revealing clear text positions.
+
 \subsection{Worker}
 The name Worker refers to a generic computational unit of the system, that can handle tasks from the server, rewarded with a digital currency. In our case, the workers are responsible for computing the distances between the positions of the clients and the parking spots, using the homomorphic encryption scheme. 
 
@@ -468,7 +473,7 @@ The workers's digial reward can be described as a token, that allows them to req
 
 The MQTT protocol is used for the communication between the clients and the proxy. It's necesassry to use a pub/sub mechanism in order to keep alive the connection between the two entities. This is achived by having the client subscribe to a topic, while the proxy publishes updates to that topic.
 
-Moreover, the proxy is responsible for managing the connection with the broker, allowing the clients to receive updates on the parking spots without exposing their positions. In this way, the client $MC_i$ \textbf{publishes} its position $Area_j$ to the topic $ID_{MC_i}$. The proxy then forwards the position to the broker, which stores the encrypted positions of the parking spots.
+Moreover, the proxy is responsible for managing the connection with the broker, allowing the clients to receive updates on the parking spots. In this way, the client $MC_i$ \textbf{publishes} its position $Area_j$ to the topic $ID_{MC_i}$. The proxy then forwards the position to the broker, which stores the encrypted positions of the parking spots.
 
 When the computation is finished, the broker publishes the results to the topic $ID_{MC_i}$, allowing the client to receive the updates on the parking spots. The client can then \textbf{subscribe} to the topic $ID_{MC_i}$ to receive updates on the parking spots.
 
@@ -490,12 +495,12 @@ The system is designed to allow the following operations:
 \begin{tabularx}{\linewidth}{|l|X|X|X|p{4cm}|}
 \hline
 \textbf{API} & \textbf{Subject} & \textbf{Protocol} & \textbf{Receiver} & \textbf{Payload} \\ \hline
+Key Obtain & CA & HTTP GET & Backend & - \\ \hline
+Key publish & MC & HTTP POST & CA & $\{id:ID_{mc}, pub. key: k_{mc}^+ \}$ \\ \hline
 Position Publish & MC & MQTT Sub & Proxy & $\{position: \xi_{mc}( P_i )\}$ \\ \hline
-Key Obtain & MC & HTTP GET & Backend & - \\ \hline
-Key publish & MC & HTTP POST & Proxy & $\{keys: \newline [\forall j \in \text{P},\ k_{mc_i, park_j}]\}$ \\ \hline
-Parking Request & Proxy & MQTT Pub & Backend &
-$\{proxy: p_i,\ positions: \newline [\forall j \in \text{P},\ \xi_{mc_i, park_j}(P_i)]\}$ \\ \hline
-Parking Publish & LDS & POST & Backend & $\{\xi_{park_j}(P_j), k_{park_j}^+\newline \text{status} \in \{\text{free}, \text{occ.}\}\}$ \\ \hline
+Parking Request & Proxy & MQTT Pub & Backend & $\{proxy: pr_i,\ position: \xi_{mc_i}(P_i) \}\\ \hline
+Key Request & LDS & HTTPS GET & CA & $id: ID_{park_j}$ \\ \hline
+Parking Publish & LDS & POST & Backend & $\{\xi_{park_j}(P_j),\newline id:ID_{park_j}, \newline \text{status} \in \{\text{free}, \text{occ.}\}\}$ \\ \hline
 Work Request & Worker & HTTP POST & Backend & - \\ \hline
 Task Finish & Worker & HTTP POST & Backend & $\{worker: w_i,\ task: t_j,\newline result: \xi_{mc_i, park_j}(R)\}$ \\ \hline
 Computation Resoult & Backend & MQTT Pub & Proxy & $\{proxy: p_i,\ resoult: \newline [\forall j \in \text{P},\ \xi_{mc_i, park_j}(R)]\}$ \\ \hline
@@ -518,8 +523,9 @@ We can summarize the protocol flow in the following steps:
 
 \subsection{Protocol Flow}
 \begin{enumerate}
-    \item The mobile client $MC_i$ initiates a public-keys retrieval by invoking the \textbf{Key Obtain} API via an HTTP GET request to the backend server. \emph{(API: \texttt{Key Obtain}, Payload: none) \to Keys: $[\forall p_j \in P, \xi_{p_j^+}]$)}
-    \item For each parking spot $park_j$, the client $MC_i$ generates a symmetric translation key $k_{mc_i, park_j}$ and sends the collection to the proxy using the \textbf{Key Publish} API via an HTTP POST request. \emph{(API: \texttt{Key Publish}, Payload: $\{keys: [\forall j \in \text{P},\ k_{mc_i, park_j}]\}$)}
+    \item The mobile client $MC_i$ generates a new public/private key pair $(k_{mc_i}^+, k_{mc_i}^-)$ and sends the public key to the certification authority (CA) using the \textbf{New Client} API via an HTTP POST request. 
+    \item After the CA verifies the client, it generates a symmetric key $k_{mc_i, park_j}$ for each parking spot $park_j$. The operation of key generation is performed by \emph{Key Translation}$(pp, k_{mc_i}^+, k_{park_j}^-)$, where $pp$ is the public parameters of the system, $k_{mc_i}^+$ is the public key of the client, and $k_{park_j}^-$ is the private key of the parking spot.
+    % TOCHECK next
     \item The client $MC_i$ then publishes its encrypted position $\xi_{mc}(P_i)$ to the MQTT topic $ID_{MC_i}$ using the \textbf{Position Publish} API. \emph{(API: \texttt{Position Publish}, Payload: $\{position: \xi_{mc}(P_i)\}$)}
     \item The proxy subscribes to the topic, receives the encrypted position, and re-encrypts it for each parking spot using the associated key $k_{mc_i, park_j}$, creating the re-encrypted blob $[\forall j \in \text{P},\ \xi_{mc_i, park_j}(P_i)]$. It then invokes the \textbf{Parking Request} API via MQTT to publish this to the backend. \emph{(API: \texttt{Parking Request}, Payload: $\{proxy: p_i,\ positions: [\ldots]\}$)}
     \item Each local data source (LDS) publishes its own position $\xi_{park_j}(P_j)$ and occupancy status via the \textbf{Parking Publish} API using an HTTP POST request to the backend. \emph{(API: \texttt{Parking Publish}, Payload: $\{\xi_{park_j}(P_j),\ status\}$)}
@@ -533,9 +539,9 @@ We can summarize the protocol flow in the following steps:
 
 The main goal of the study is to provide a privacy-preserving location matching protocol, that allows clients to securely publish and query their positions without revealing sensitive information. In order to fulfill this goal, we need to ensure that the system is attack-resistant and that the privacy of the clients is preserved.
 
-In the previous implementation\cite{genova2024helamqtt}, the logic behind the position matching protocol relied on the evaluation of the euclidian distance between the positions of the clients and the parking spots from a trusted CA. This approach, even tought hided from the server the raw positions of the clients, leaked information of the MC. This was accomplished by allowing an attacker to perform a \emph{binary search} of the client position, by sending a series of location requests based on the topics the clients subscribed to. By narrowing down the search space, the attacker could eventually find the exact position of the client, thus compromising its privacy.
+In the previous implementation\citep{genova2024helamqtt}, the logic behind the position matching protocol relied on the evaluation of the euclidian distance between the positions of the clients and the parking spots from a trusted CA. This approach, even tought hided from the server the raw positions of the clients, leaked information of the MC. This was accomplished by allowing an attacker to perform a \emph{binary search} of the client position, by sending a series of location requests based on the topics the clients subscribed to. By narrowing down the search space, the attacker could eventually find the exact position of the client, thus compromising its privacy.
 
-This showcased that HE is secure if and only if the encryption & decryption operation are performed correctly, preferably by the client itself.
+This showcased that HE is secure if and only if the encryption and decryption operation are performed correctly, preferably by the client itself.
 
 Another really serious isssue with the Genova's protocol is that that there's no way to ensure that the user is really itself. Moreover, if an attacker is able to read the network traffic, he could easily impersonate the client and send fake position updates to the server, or even worse, apply the previous described attack.
 
