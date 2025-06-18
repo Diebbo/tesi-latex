@@ -3,6 +3,8 @@
 
 For the testing of the protocol, we implemented a proof-of-concept in Python, using the OpenFHE library\cite{openFHE}. The testing methodology consists of the following steps: firstly, we generate a set of random positions for the parking spots. After that we generated a random position for the client, we computed the z-order encoding for both the client and the parking spots, and finally we computed the distances between the client position and the parking spots using the homomorphic encryption scheme.
 
+At the same time, we also computed the distance calculation using a clear computation (trusted backend) with traffic in encrypted with asymmetric entryption (RSA). This allows us to compare the performance of the homomorphic encryption scheme with a traditional asymmetric encryption scheme.
+
 \section{Performance Evaluation}
 
 What tested:
@@ -29,10 +31,13 @@ What tested:
 
 \section{Security Analysis}
 
+
+
 \section{Future Work}
 \begin{itemize}
     \item Integrazione della libreria \emph{SEAL Embedded} per i sensori
-    \item Definizione della funzione per il calcolo delle distanze
+    \item calcolo delle celle adiacenti in z-order
+    \item livello di preferenza per le posizioni un determinato luog
     \item Analisi degli ordini di grandezza degli errori
     \item Selezione delle posizioni rilevanti:
     \begin{itemize}
