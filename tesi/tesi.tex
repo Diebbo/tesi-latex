@@ -589,91 +589,35 @@ All the traffic is HE ciphered. \\ \hline
 \chapter{Testing}
 \section{Testing Methodology}
 
+For the testing of the protocol, we implemented a proof-of-concept in Python, using the OpenFHE library\cite{openFHE}. The testing methodology consists of the following steps: firstly, we generate a set of random positions for the parking spots. After that we generated a random position for the client, we computed the z-order encoding for both the client and the parking spots, and finally we computed the distances between the client position and the parking spots using the homomorphic encryption scheme.
+
 \section{Performance Evaluation}
+
+What tested:
+\begin{itemize}
+    \item Encryption and decryption time for the client position
+    \item Distance computation time for the workers
+    \item Overall time for the protocol execution
+    \item Comparison with clear computation for the client
+\end{itemize}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=8.5cm,height=7cm]{img/crypto_times.png}
+    \caption{Visualization of the Encryption and Decryption time using HE}
+    \label{fig:testing}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=8.5cm,height=7cm]{img/total_time_comparison.png}
+    \caption{Comparison between RSA and HE for encryption and decryption}
+    \label{fig:he-vs-rsa}
+\end{figure}
 
 \section{Security Analysis}
 
-\chapter{Project}
-\section{Glossary}
-\begin{itemize}
-    \item LDS: Sensors
-    \item MC: Clients
-\end{itemize}
-
-\section{Project Idea}
-L'idea centrale consiste nell'applicare i principi della \emph{homomorphic encryption} al protocollo \emph{LA-MQTT}. Quando un client invia un aggiornamento di posizione, questa viene trasmessa in forma cifrata mediante Fully Homomorphic Encryption (FHE). Il server esegue un'analisi sulle posizioni disponibili, appartenenti alla stessa area geografica, e dopo aver effettuato un controllo con la chiave di verifica, restituisce un blob cifrato contenente le distanze calcolate.
-
-\subsection{Funzionalità Principali}
-\begin{itemize}
-    \item \textbf{Position Publish}: Il client aggiorna la propria posizione per ricevere informazioni dai publisher relativamente ai sensori presenti nell'area di interesse.
-    \begin{itemize}
-        \item $Enc(GPS\_DATA)$
-        \item $P_{i}$: Posizione
-    \end{itemize}
-    
-    \item \textbf{Area Subscription}: Un client si sottoscrive a un'area di interesse. Per ogni aggiornamento di posizione viene effettuato un controllo su tutte le posizioni riportate fino a quel momento appartenenti all'area.
-    \begin{itemize}
-        \item $C(i, t_{s})$
-    \end{itemize}
-    
-    \item \textbf{Geofence Publish}: Permette ai client LDS di pubblicare un blob contenente:
-    \begin{itemize}
-        \item Dati geofence (formato GEOJSON RFC 7946)
-        \item $g_s$: geofence target
-        \item $c_{s}$: contenuto pubblicizzato
-        \item $t_{s}$: topic
-        \item $e_{s}$: evento di mobilità
-    \end{itemize}
-\end{itemize}
-
-\section{Attori del Sistema}
-\begin{itemize}
-    \item \textbf{Broker/Proxy}: Gestisce le chiavi di tutti i client che hanno effettuato almeno una sottoscrizione
-    \item \textbf{Publisher}: Pubblicano aggiornamenti sulle posizioni disponibili
-    \item \textbf{Subscriber}: Sottoscrivono aree geografiche e ricevono aggiornamenti sui parcheggi disponibili
-\end{itemize}
-
-\section{Vantaggi}
-\begin{itemize}
-    \item Dati sempre cifrati
-    \item In caso di \emph{re-encryption}, solo il proxy conosce le posizioni decifrate dei sensori
-    \begin{itemize}
-        \item Un proxy malevolo non compromette la posizione dell'utente
-        \item Possibile individuare proxy fittizi mediante falsi aggiornamenti di posizione
-    \end{itemize}
-\end{itemize}
-
-\section{Svantaggi}
-\begin{itemize}
-    \item Latenze significative (worker)
-    \item Attenzione necessaria alla triangolazione delle posizioni
-\end{itemize}
-
-\section{Stack Tecnologico}
-\begin{itemize}
-    \item \textbf{Soluzione ad alte prestazioni}:
-    \begin{itemize}
-        \item C++ SEAL (Microsoft)
-        \item Rust TFHE-rs (ZAMA)
-    \end{itemize}
-    \item \textbf{Proof of Concept}:
-    \begin{itemize}
-        \item Python Concrete (ZAMA)
-    \end{itemize}
-\end{itemize}
-
-\section{Interrogativi Aperti}
-\begin{itemize}
-    \item \textbf{Prestazioni}: È accettabile un delay di 5-10 secondi per l'analisi dei dati?
-    \item \textbf{Re-encryption}: È una soluzione eccessiva?
-    \begin{itemize}
-        \item Il server salva le posizioni cifrate nel database
-        \item Possibile alternativa: Private Set Intersection (PSI)
-    \end{itemize}
-    \item \textbf{Architettura}: Request-Response vs MQTT
-\end{itemize}
-
-\section{Sviluppi Futuri}
+\section{Future Work}
 \begin{itemize}
     \item Integrazione della libreria \emph{SEAL Embedded} per i sensori
     \item Definizione della funzione per il calcolo delle distanze
