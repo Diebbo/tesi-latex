@@ -141,7 +141,6 @@ In my own implementation, I addressed those issues by introducing different tech
 
 In this section, we will analyze the threat model of the system, identifying the potential attackers and their capabilities. 
 
-One of the assumptions of the system is that the CA is a trusted entity, moreover if an attacker is able to compromise the CA, he can also compromise the whole system. 
 
 \subsection{Mitigation Strategies Malicious Actors}
 
@@ -172,3 +171,5 @@ All the traffic is HE encrypted. \\ \hline
 \caption{Adversarial Threats and Mitigation Strategies}
 \label{table:adversaries}
 \end{table}
+
+In the \cref{table:adversaries}, we summarize the potential adversaries and their goals, along with the mitigation strategies that can be employed to counteract their attacks. It's also important to notice that one of the assumptions of the system was that the CA is a trusted entity, moreover if an attacker is able to compromise the CA, he can also compromise the whole system. Thus, it's not worth to consider the CA as an adversary.
