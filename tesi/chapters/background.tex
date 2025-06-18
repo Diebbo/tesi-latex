@@ -1,0 +1,234 @@
+\chapter{Background}
+\section{Request-Response Protocol}
+The Request-Response protocol is a fundamental communication pattern in distributed systems where a client sends a request to a server and waits for a response. This synchronous communication model is characterized by its simplicity and direct interaction between parties, making it suitable for operations requiring immediate feedback and confirmation.
+
+\subsection{HTTP}
+HTTP (Hypertext Transfer Protocol) is the foundation of data communication on the World Wide Web. It operates as a request-response protocol, allowing clients to request resources from servers and receive responses. HTTP supports various methods (GET, POST, PUT, DELETE) for different types of operations and is extensible through headers and status codes.
+
+\subsubsection{HTTPS}
+HTTPS is a version of HTTP built on the SSL/TLS protocol, providing secure communication over a computer network. It encrypts data exchanged between clients and servers, ensuring confidentiality and integrity. HTTPS is essential for protecting sensitive information from eavesdropping and tampering.
+
+One of the key features of HTTPS is its use of certificates to authenticate the server, ensuring that clients are communicating with the intended entity. This is possible through a relatively high usage of computational resources, which is a trade-off for the enhanced security it provides.
+
+\subsection{Reuqest-Response in IoT devices}
+HTTPS is a commonly used choice also for IoT devices. However, its usability is often limited due to a number of factors:
+\begin{itemize}
+    \item \textbf{Resource Constraints\cite{mazhar2023iotsecurity}}: Encrypting and decrypting certificates standards (RSA, EEC, AES) can be computationally expensive, which is a significant concern for IoT devices with limited processing power and memory.
+    \item \textbf{Lack of Secure Firmware Updates\cite{cyberark2024iot}}: Many IoT devices do not support secure firmware updates, making it difficult to patch vulnerabilities in the HTTPS implementation.
+    \item \textbf{Weak or Nonexistent Certificate Validation\cite{bishopfox2020weakcertificates}}: Many IoT devices do not validate server certificates properly, leading to potential vulnerabilities.
+\end{itemize}
+
+\section{Publish-Subscribe Protocol}
+The Publish-Subscribe (Pub/Sub) protocol is an asynchronous messaging pattern where senders (publishers) categorize messages into topics without knowledge of the receivers (subscribers). Subscribers express interest in specific topics and receive messages published to those topics. This decoupled architecture enables scalable and flexible communication in distributed systems.
+
+\subsection{MQTT}
+MQTT (Message Queuing Telemetry Transport) is a lightweight, open-source messaging protocol designed for constrained devices and low-bandwidth, high-latency networks. It implements the publish-subscribe pattern over TCP/IP, providing three quality of service levels for message delivery and supporting various security features.
+
+The protocol defines three main network entities:
+\begin{itemize}
+    \item \textbf{Message Broker}: The central component that manages message routing between publishers and subscribers. It receives messages from publishers and forwards them to subscribers based on their subscriptions.
+    \item \textbf{Publisher}: A client that sends messages to the broker on specific topics. 
+    \item \textbf{Subscriber}: A client that expresses interest in specific topics and receives messages published to those topics by the broker.
+\end{itemize}
+
+\subsection{LA-MQTT}
+LA-MQTT (Location-Aware MQTT) extends the standard MQTT protocol by incorporating location-based features. It enables spatial queries and location-aware message routing, making it particularly suitable for IoT applications requiring geographical context in message distribution.
+
+The protocol is first intruduced with the purpose of resolving the limitations of traditional MQTT in handling location-based data\cite{montori2022lamqtt}.
+
+\begin{table}[h]
+\small
+\begin{tabularx}{\linewidth}{|l|X|X|X|p{4cm}|}
+\hline
+\textbf{API} & \textbf{Subject} & \textbf{MQTT OP} & \textbf{Topic} & \textbf{Payload} \\ \hline
+Position publish & MC & Publish & GPS\_DATA & $\{position: ( P_i )\}$ \\ \hline
+Topic subscription & MC & Subscribe & $C(i, t_s)$ & * \\ \cline{2-5}
+ & MC & Publish & MC\_SUB & $\{ mc: i, topic: t_s \}$ \\ \hline
+Geofence publish & LDS & Publish & GEOFENCE\_DATA & $\{topic: t_s, content: c_s, $\newline$region: g_s, event: e_s\}$ \\ \hline
+Content publish & Backend & Publish & $C(i, t_s)$ & $\{content: c_s\}$ \\ \hline
+\end{tabularx}
+\caption{The LA-MQTT Publish-subscribe Operations}
+\label{table:la-mqtt}
+\end{table}
+
+The table \ref{table:la-mqtt} summarizes the main operations of the LA-MQTT protocol, highlighting the interactions between clients (MC), location data sources (LDS), and the backend system.
+
+Those operations include:
+\begin{itemize}
+    \item \textbf{Position Publish}: MC publish their GPS data to the broker, allowing other clients to receive updates on their positions.
+    \item \textbf{Topic Subscription}: MCs subscribe to specific topics, enabling them to receive messages related to their areas of interest.
+    \item \textbf{Geofence Publish}: LDSs publish geofence data, which includes the topic, content, region, and event associated with the geofence.
+    \item \textbf{Content Publish}: The backend publishes content related to the subscribed topics, forwarding it to the subscribed MCs.
+\end{itemize}
+
+\section{Universal Location Referencing}
+Universal Location Referencing provides standardized methods for encoding and representing geographical locations. These systems ensure consistent and unambiguous location representation across different applications and platforms.
+
+\subsection{Cantor Pairing}
+Cantor Pairing is a mathematical technique that uniquely maps two natural numbers to a single natural number. This bijective function is particularly useful in computer science for combining two coordinates into a single value while maintaining the ability to recover the original coordinates.
+
+More formally, the Cantor pairing function is defined as:
+\[
+    \pi(x, y) = \frac{(x + y)(x + y + 1)}{2} + y
+\]
+
+\vspace{5mm}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=6.5cm,height=4.7cm]{img/cantor-pairing.jpg}
+    \caption{Visualization of the Cantor pairing function mapping two-dimensional coordinates to a single value}
+    \label{fig:cantor}
+\end{figure}
+
+\vspace{5mm}
+
+\section{Space Filling Curves}
+Space Filling Curves are mathematical curves that pass through every point in a multi-dimensional space. They provide a way to map multi-dimensional data to a single dimension while preserving spatial locality, making them valuable for spatial indexing and data organization.
+
+The most common space-filling curves include:
+\begin{itemize}
+    \item \textbf{Z-order Curve}
+    \item \textbf{Hilbert Curve}
+\end{itemize}
+
+\vspace{5mm}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=6.5cm,height=4.7cm]{img/hilbert-z-order.jpg}
+    \caption{Comparison of Z-order and Hilbert curves in two-dimensional space}
+    \label{fig:space-filling}
+\end{figure}
+
+\vspace{5mm}
+
+The Hilbert Curve is particularly notable for its ability to preserve locality, meaning that points that are close in multi-dimensional space remain close in the one-dimensional representation.
+
+On the other hand, the Z-order Curve, preserve the order of positions in a grid-like manner, making it suitable for applications requiring efficient spatial queries. Thus, it's possible to reduce the problem of finding matching points into finding the maximum prefix of two bit strings.
+
+\subsection{Z-order Curve}
+As mentioned, the Z-order curve is one of the most widely used space-filling curves. It maps multi-dimensional data into a single dimension, similar to the Cantor encoding function. Conversly, it has some some useful properties, when applied to spacial data, such as preserving locality and allowing efficient range queries.
+
+\subsubsection{Z-order Encoding}
+
+The encoding process for Z-order involves interleaving the bits of the coordinates of a point in a multi-dimensional space. For example, given a point with coordinates \( (x, y) \), the Z-order encoding can be represented as:
+\[
+    Z(x, y) = \sum_{i=0}^{n} (x_i \cdot 2^{2i} + y_i \cdot 2^{2i+1})
+\]
+
+Where:
+\begin{itemize}
+    \item \( x_i \) and \( y_i \) are the bits of the binary representation of the coordinates \( x \) and \( y \).
+    \item \( n \) is the number of bits used to represent each coordinate.
+\end{itemize}
+
+\subsubsection{Z-order Decoding}
+The decoding process retrieves the original coordinates from the Z-order encoded value. Given a Z-order value \( Z \), the decoding can be performed by extracting the bits corresponding to each coordinate:
+\[
+    x = \sum_{i=0}^{n} (Z \pmod{ 2^{2i+2} }) \cdot 2^i
+\]
+Where:
+\begin{itemize}
+    \item \( Z \pmod{ 2^{2i+2} } \) extracts the bits corresponding to the \( i \)-th coordinate.
+    \item The result is then shifted and combined to reconstruct the original coordinate \( x \).
+\end{itemize}
+
+\subsubsection{Z-order Querying}
+Let's consider a scenario where we want to find all points within a specific range in a two-dimensional space. We define \( P \) as the set of points in the space, and we want to find all points \( p \in P \) such that:
+\[
+    p.x \in [x_{min}, x_{max}] \quad \text{and} \quad p.y \in [y_{min}, y_{max}]
+\]
+
+We can leverage the Z-order encoding to efficiently query this range. This is possible by calculating the order of the encoding that we want to find. 
+By definition we can represent the GPS coordinates of a point \( (x_p, y_p) \) into a point \( e_p \). This point will be represented in the space of \( n \) orders, each contained in \( \mathbb{Z}_4 \).
+
+\subsubsection{Maximum Common Prefix Search}
+A key operation in Z-order based spatial queries is finding the maximum common prefix between two Z-order encoded values. This operation is fundamental for determinating spatial relationships between points.
+
+Given two Z-order encoded values \( Z_1 \) and \( Z_2 \), we can find the maximum common prefix by following three steps. Firstly, we convert both values to their binary representation. Then, we compare the bits from left to right, stopping at the first position where the bits differ. Finally, we extract the common prefix up to that point. The cited algorithm shows that in the worst case, the maximum common prefix can be found in \( O(n) \) time, where \( n \) is the number of bits in the Z-order encoding.
+
+The length of the common prefix determines the size of the smallest bounding box that contains both points. This property is particularly useful for:
+\begin{itemize}
+    \item Finding the smallest region containing multiple points
+    \item Determining if points are within a certain distance of each other
+    \item Optimizing spatial range queries
+\end{itemize}
+
+For example, consider two points with Z-order encodings:
+\begin{align*}
+    Z_1 &= 3310_4 \\
+    Z_2 &= 3312_4
+\end{align*}
+The maximum common prefix is \( 331_4 \), indicating that these points share the same region in the first three orders of the encoded space. We used base 4 because it's the easiest way to visualize which of the four quadrants the point belongs to, as each digit represents a quadrant in a two-dimensional space.
+
+This prefix-based approach can be extended to handle range queries by:
+\begin{enumerate}
+    \item Encoding the query range boundaries
+    \item Finding the maximum common prefix of the range
+    \item Generating all possible Z-order values that share this prefix
+\end{enumerate}
+
+The efficiency of this approach comes from the fact that we can perform these operations using simple bitwise operations, making it suitable for real-time applications.
+
+
+\section{Privacy Preserving}
+Privacy Preserving techniques ensure the protection of sensitive information while allowing necessary computations and data processing. These methods are crucial in maintaining confidentiality in distributed systems and data analysis. For example, in the context of location-based services, privacy-preserving techniques allow for the sharing of location data without revealing exact coordinates, thus protecting user privacy.
+
+\subsection{Homomorphic Encryption}
+Homomorphic Encryption(HE) is a form of encryption that allows specific types of computations to be performed on ciphertext, producing an encrypted result that, when decrypted, matches the result of operations performed on the plaintext.
+
+Let's denote \( \xi_k \) as the encryption function, \( \xi_k^{-1} \) as the decryption function, and \( f \) as a function that can be computed on plaintexts. Homomorphic Encryption satisfies the property:
+\[
+    \xi_k(f(x)) = f(\xi_k(x))
+\]
+
+\subsubsection{Fully Homomorphic Encryption}
+Fully Homomorphic Encryption (FHE) enables arbitrary computations on encrypted data without decryption. It allows for complex operations while maintaining data privacy, although it comes with significant computational overhead.
+
+\subsubsection{Partially Homomorphic Encryption}
+Partially Homomorphic Encryption (PHE) supports only specific types of operations (like addition or multiplication) on encrypted data. While more limited than FHE, it offers better performance and is feasible for applications requiring specific mathematical operations.
+
+\section{Usage of HE for Matching}
+Homomorphic Encryption can be used to securely match location. To archive this, we can use different techniques such as:
+\begin{itemize}
+    \item \textbf{Distance Calculation}: It is archived by tweeking the distance calculation algorithms (e.g., Euclidean distance, Cosine similarity, Manhattan Distance) to work with encrypted coordinates. The main limit comes with the constraint that the operations must be compatible with the encryption scheme used. For instance, calculating the squared Euclidean distance between two points \( (x_1, y_1) \) and \( (x_2, y_2) \) can be expressed as:
+    \[
+        d^2 = (x_1 - x_2)^2 + (y_1 - y_2)^2
+    \]
+    That can be computed homomorphically, and then decrypted before computing the square root to get the actual distance.
+    \item \textbf{Encoding Coordinates}: By encoding coordinates into a grid-like structure, we can reduce the problem into finding two different points sharing the same area-encoding. This apporach comes with some limitations, mainly related to the precision of the approximation and the size of the grid. Still, it allows for efficient matching of points within a specific area without revealing their exact coordinates.
+\end{itemize}
+
+\subsubsection{Privacy-Preserving Z-order Queries}
+When implementing privacy-preserving location queries using Z-order encoding, we can employ homomorphic encryption to protect sensitive location data \cite{zhang2020privacy}. Let's consider a scenario where a user \( A \) wants to share their location with user \( B \) while maintaining privacy:
+
+\begin{itemize}
+    \item Let \( QK_A \) be the QuadKey representation of \( A \)'s location
+    \item Let \( M_B \) be the bit mask specified by \( A \) for user \( B \)
+    \item The service provider (SP) performs homomorphic multiplication: \( QK_A \otimes M_B \)
+\end{itemize}
+
+To ensure unambiguous results, we increment each value in \( qk_i \in QK_A \) by one before encryption, such that \( qk_i \in \{1,2,3,4\} \). In this scheme \cite{zhang2020privacy}:
+\begin{itemize}
+    \item A bit mask value of 1 preserves the location data
+    \item A bit mask value of 0 masks the location data
+\end{itemize}
+
+After decryption on the client device, we:
+\begin{enumerate}
+    \item Remove any zero values
+    \item Convert the elements back to \( \mathbb{Z}_4 \)
+    \item Generate a masked QuadKey string that produces a bounding box with the desired level of detail
+\end{enumerate}
+
+This approach is computationally efficient as it requires only one round of homomorphic multiplication. The resulting bounding box effectively hides both precise locations and movement patterns, providing privacy even against colluding users.
+
+For example, given a precise GPS coordinate \( (43.084451, -77.680069) \), the system can generate bounding boxes of varying sizes based on the privacy preferences (where \( d \) represents the level of detail). This ensures that location data is shared at an appropriate granularity while maintaining user privacy.
+
+% TODO: add other type of queries
+
+\subsection{PHE and FHE Implications}
+The choice between Partially and Fully Homomorphic Encryption has significant implications for system performance, security, and functionality. As previously discussed, the two methods used for proximity checks in a location-based scenario require careful consideration of the encryption scheme.
+
+If the requirements only involve checking whether two positions share a common area, leveraging the speed and simplicity of the Z-order approach is recommended. Conversely, if the goal is to compute a precise floating-point distance value, a homomorphically encrypted distance function (e.g., Euclidean distance) may be necessary. However, it is important to note that in this case, the final result may be affected by computational noise inherent to FHE operations.
