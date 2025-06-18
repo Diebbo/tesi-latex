@@ -418,7 +418,7 @@ To deeply understand the system operations, let's first analyze the use case of 
 
 Even through it seems a simple and straightforward mechanism, if we want to move the operations to the server, in order to preserve computational resources on the client side, a lot of challenges aries. The first one is to securely share the position of the client with the server, without exposing it to the workers. The second challenge is to compute the distances between the positions of the clients and the parking spots, without revealing the positions of the clients to the workers. The third problem is not to leak sensible information about the clients, after the computation is finished.
 
-In this scenario, it's not enough to simply encrypt the positions of the clients, as the workers need to compute the distances between the positions of the clients and the parking spots, that are also encrypted with a different key. To resolve this problem, we could just leave the parking position cleartext on the database, but this would expose the parking spots to the workers, that could then leak the information for profit. In order to avoid this, and also achieve a full zero-knowledge protocol, we need to use a re-encryption mechanism, that allows the workers to compute the distances between the positions of the clients and the parking spots, without revealing the positions of the clients to the workers.
+In this scenario, it's not enough to simply encrypt the positions of the clients, as the workers need to compute the distances between the positions of the clients and the parking spots, that are also encrypted with a different key. To resolve this problem, we could just leave the parking position cleartext on the database, but this would expose the parking spots to the workers, that could then leak the information for profit. In order to avoid this, and also achieve a full privacy-oriented protocol, we need to use a re-encryption mechanism, that allows the workers to compute the distances between the positions of the clients and the parking spots, without revealing the positions of the clients to the workers.
 
 The distance problem is avoided by using the Z-order encoding, that allows us to reduce the problem of finding matching points into finding the maximum prefix of two bit strings. In our showcase, the simulated server will perform a simple encrypted subtraction between the positions of the clients and the parking spots to reveal if the two point are the same or not by checking if the result is zero. 
 
@@ -450,18 +450,14 @@ In our system, the clients responsibilies are very limited, as they do not trust
 \subsection{Server}
 The Backend Server (commonly called Information Broker) is the central component of the system, responsible for managing the communication between clients and sensors. It also acts like a database, handling and storing the encrypted parking spots data.
 
-This centralized component is crucial in the architecture, as it allows all sort of mobile actors (including clients and LDs) to have a persistent connection with the system, altough it's not enough if we want to achieve a full zero-knowledge protocol.
+This centralized component is crucial in the architecture, as it allows all sort of mobile actors (including clients and LDs) to have a persistent connection with the system, altough it's not enough if we want to achieve a full zero-trust protocol.
 
-\subsection{Proxy}
-The Proxy (Re-encryptor) is an intermediary component that facilitate the connection between clients and the server.
+Thanks to HE, the server can perform comuptation without knowing the cleartext positions of the other actors.
 
-It utilize the MQTT protocol to manage the comunication with the client. Moreover, it keeps alive the TCP connection with the client (that usually has a natted IP address) and the broker.
-This is accomplished by making the client subscribe to the connection topic, while the proxy publishes the updates to the server about the client requests.
-
-This approach allows the user to have a persistent connection, without the need to maintain a direct TCP connection with the server. The proxy is also responsible for managing the re-encryption of the data, ensuring that the server (and the workers) can compute the calculations on ciphertext encrypted with the right keys.
-
-\subsection{Certification Authority}
+\subsection{Certification Authority / Proxy}
 The certification authority (CA) is a trusted entity responsible for managing the public keys of the clients and the public/private keys of the parking spots. Because he is a trusted entity, the CA knows the private keys of the parking spots. Thus, it can generate the symmetric translation keys required for a secure computation of the client distances without revealing clear text positions.
+
+In our system, the CA also acts like a proxy re-encryptor\cite{POLYAKOV2017FastPRE}, as it is responsible for managing the right keys for the homomorphic operation made on the encrypted data. 
 
 \subsection{Worker}
 The name Worker refers to a generic computational unit of the system, that can handle tasks from the server, rewarded with a digital currency. In our case, the workers are responsible for computing the distances between the positions of the clients and the parking spots, using the homomorphic encryption scheme. 
@@ -471,16 +467,14 @@ The workers's digial reward can be described as a token, that allows them to req
 \section{Network Protocol and Communication}
 \subsection{MQTT}
 
-The MQTT protocol is used for the communication between the clients and the proxy. It's necesassry to use a pub/sub mechanism in order to keep alive the connection between the two entities. This is achived by having the client subscribe to a topic, while the proxy publishes updates to that topic.
+The MQTT protocol is used for the communication between the clients and the server. It's necesassry to use a pub/sub mechanism in order to keep alive the connection between the two entities. This is achived by having the client subscribe to a topic, while the proxy publishes updates to that topic.
 
-Moreover, the proxy is responsible for managing the connection with the broker, allowing the clients to receive updates on the parking spots. In this way, the client $MC_i$ \textbf{publishes} its position $Area_j$ to the topic $ID_{MC_i}$. The proxy then forwards the position to the broker, which stores the encrypted positions of the parking spots.
+Moreover, the server is responsible for managing the connection with the LDs, allowing the clients to receive updates on the parking spots. In this way, the client $MC_i$ \textbf{publishes} its position $Area_j$ to the topic $ID_{MC_i}$. The server can then apply the homomorphic operations on the data, using the keys provided by the CA.
 
 When the computation is finished, the broker publishes the results to the topic $ID_{MC_i}$, allowing the client to receive the updates on the parking spots. The client can then \textbf{subscribe} to the topic $ID_{MC_i}$ to receive updates on the parking spots.
 
 \subsection{HTTP}
-The HTTP protocol is used for all the traffic arriving and leaving the backend server. The server is responsible for managin the storage of the encrypted parking spots data, for handling the requests from the proxy(s) and managing the workers.
-
-Beacause the backend server acts also as a database, it is responsible for storing the encrypted positions of the parking spots, and for managing the requests from the clients. Thus, it provides an HTTP API for the clients to interact with the system. 
+The HTTP protocol is used for the communication between the CA and the other entities of the system. Because the CA performs atomic actions, such as key generation and translation, it is necessary to use a request-response protocol to ensure that the operations are performed in a secure and reliable way.
 
 %\newpage
 
@@ -494,7 +488,7 @@ The system is designed to allow the following operations:
 \hline
 \textbf{API} & \textbf{Subject} & \textbf{Protocol} & \textbf{Receiver} & \textbf{Payload} \\ \hline
 
-Key Obtain & CA / Proxy & HTTP GET & LDs & $\{id: ID_{park_j}\}$ \\ \hline
+Key Obtain & LDs & HTTP GET & CA / Proxy & $\{id: ID_{park_j}\}$ \\ \hline
 
 Key Share & Client & HTTP POST & CA / Proxy & $\{id: ID_{mc},\ \text{pub. key: } k_{mc}^+\}$ \\ \hline
 
@@ -532,16 +526,15 @@ We can summarize the protocol flow in the following steps:
 
 \subsection{Protocol Flow}
 \begin{enumerate}
-    \item The mobile client $MC_i$ generates a new public/private key pair $(k_{mc_i}^+, k_{mc_i}^-)$ and sends the public key to the certification authority (CA) using the \textbf{New Client} API via an HTTP POST request. 
-    \item After the CA verifies the client, it generates a symmetric key $k_{mc_i, park_j}$ for each parking spot $park_j$. The operation of key generation is performed by \emph{Key Translation}$(pp, k_{mc_i}^+, k_{park_j}^-)$, where $pp$ is the public parameters of the system, $k_{mc_i}^+$ is the public key of the client, and $k_{park_j}^-$ is the private key of the parking spot.
-    % TOCHECK next
-    \item The client $MC_i$ then publishes its encrypted position $\xi_{mc}(P_i)$ to the MQTT topic $ID_{MC_i}$ using the \textbf{Position Publish} API. \emph{(API: \texttt{Position Publish}, Payload: $\{position: \xi_{mc}(P_i)\}$)}
-    \item The proxy subscribes to the topic, receives the encrypted position, and re-encrypts it for each parking spot using the associated key $k_{mc_i, park_j}$, creating the re-encrypted blob $[\forall j \in \text{P},\ \xi_{mc_i, park_j}(P_i)]$. It then invokes the \textbf{Parking Request} API via MQTT to publish this to the backend. \emph{(API: \texttt{Parking Request}, Payload: $\{proxy: p_i,\ positions: [\ldots]\}$)}
-    \item Each local data source (LDS) publishes its own position $\xi_{park_j}(P_j)$ and occupancy status via the \textbf{Parking Publish} API using an HTTP POST request to the backend. \emph{(API: \texttt{Parking Publish}, Payload: $\{\xi_{park_j}(P_j),\ status\}$)}
-    \item The backend, upon receiving new position updates, issues a \textbf{Work Request} to available workers via HTTP POST, initiating the task computation. \emph{(API: \texttt{Work Request}, Payload: none)}
-    \item Once the workers compute the distances (or other metrics) between client and parking spots, they send the result back using the \textbf{Task Finish} API. \emph{(API: \texttt{Task Finish}, Payload: $\{worker: w_i,\ task: t_j,\ result: \xi_{mc_i, park_j}(R)\}$)}
-    \item The backend then publishes the aggregated results to the proxy via MQTT using the \textbf{Computation Resoult} API. \emph{(API: \texttt{Computation Resoult}, Payload: $\{proxy: p_i,\ resoult: [\ldots]\}$)}
-    \item Finally, the proxy receives the re-encrypted results, decrypts them using the shared keys, and delivers them to the mobile client $MC_i$.
+    \item The mobile client $MC_i$ generates a new public/private key pair $(k_{mc_i}^+, k_{mc_i}^-)$ and sends the public key to the certification authority (CA) using the \textbf{Key Share} API via an HTTP POST request. \emph{(API: \texttt{Key Share}, Payload: $\{id: ID_{mc_i},\ k_{mc_i}^+\}$)}
+    \item After the CA verifies the client, it generates a symmetric key $k_{mc_i, park_j}$ for each parking spot $park_j$. The operation of key generation is performed by \emph{Key Translation}$(pp, k_{mc_i}^+, k_{park_j}^-)$, where $pp$ is the public parameters of the system, $k_{mc_i}^+$ is the public key of the client, and $k_{park_j}^-$ is the private key of the parking spot. Note that the trasnlation operation must be done each time a new parking spot is added to the system.
+    \item The $MC_i$ establish a MQTT connection with the server and subscribes to the topic $ID_{MC_i}$, which is used to receive updates on the parking spots. This is done using the \textbf{Topic Subscription} API via MQTT. \emph{(API: \texttt{Topic Subscription}, Payload: $\{topics: [position, distance]\}$)}
+    \item The client will then send the encrypted position $\xi_{mc}(P_i)$ to the server, where $P_i$ is the encoded position of the client. The encryption is done using the public key $k_{mc_i}^+$, ensuring that only the client can decrypt the position. This is done using the \textbf{Position Publish} API via MQTT. \emph{(API: \texttt{Position Publish}, Payload: $\{position: \xi_{mc}(P_i)\}$)}
+    \item The server receives the location and start the translation process, by invoking the \textbf{Translate Locations} API via HTTP GET request to the CA. The CA then re-encrypts the position for each parking spot using the associated key $k_{park_j \to mc_i}$, creating the re-encrypted blob $[\forall j \in \text{P},\ \xi_{mc_i}(P_j)]$. \emph{(API: \texttt{Translate Locations}, Payload: $\{positions: [\xi_{park_j}(P_j)]\}$)}
+    \item The server will then spread the re-encrypted positions to the workers, by invoking the \textbf{Work Request} API via HTTP GET request. The workers will then compute the distances between the client position and the parking spots, using the re-encrypted positions. \emph{(API: \texttt{Work Request}, Payload: none)}
+    \item Once the workers compute the distances (or other metrics) between client and parking spots, they send the result back using the \textbf{Task Finished} API via HTTP POST request. The result is a re-encrypted blob containing the distances between the client position and the parking spots. \emph{(API: \texttt{Task Finished}, Payload: $\{worker: w_i,\ task: t_j,\ result: \xi_{park_j \to mc_i}(R)\}$)}
+    \item The server then publishes the aggregated results to the client via MQTT using the \textbf{Distance Publish} API. The payload contains the distances between the client position and the parking spots, re-encrypted with the client's public key. \emph{(API: \texttt{Distance Publish}, Payload: $\{distances: [\forall j \in P,\ \xi_{mc_i}(R)]\}$)}
+    \item Finally, the client receives the re-encrypted results, decrypts them using its private key $k_{mc_i}^-$, checks weather the location satisfies the area matching condition.
 \end{enumerate}
 
 \section{Security Considerations}
@@ -555,6 +548,43 @@ This showcased that HE is secure if and only if the encryption and decryption op
 Another really serious isssue with the Genova's protocol is that that there's no way to ensure that the user is really itself. Moreover, if an attacker is able to read the network traffic, he could easily impersonate the client and send fake position updates to the server, or even worse, apply the previous described attack.
 
 In my own implementation, I addressed those issues by introducing different techniques from the state of the art, such as using a proxy re-encryptor and a position encoding mechanism based on Z-order. The choice of leaving the the decryption operation to the client ensures that no one is able to read the sensitive data, despite an increase of computational resources required to re-encrypt each position for each parking spot.
+
+\subsection{Threat Model}
+
+In this section, we will analyze the threat model of the system, identifying the potential attackers and their capabilities. 
+
+One of the assumptions of the system is that the CA is a trusted entity, moreover if an attacker is able to compromise the CA, he can also compromise the whole system. 
+
+\subsection{Mitigation Strategies Against Attacks}
+
+\begin{table}[h]
+\renewcommand{\arraystretch}{1.3}
+\small
+\begin{tabularx}{\linewidth}{|l|X|X|}
+\hline
+\textbf{Adversary} & \textbf{Goal / Attack} & \textbf{Mitigation Strategy} \\ \hline
+
+Malicious Client &
+Impersonate another client or send fake position updates. &
+Use digital signatures: at the time of authentication with the CA the client signs a digital contract that ensures that he is the one trying to access the system. \\ \hline
+
+Malicious Worker &
+Manipulate computation results or leak client-sensitive data. &
+Because the user has no way of finding out if an information has been manipulated during homomorphic phase, the server need to implement a mechanism of \emph{fake workload} to test workers reliability. \\ \hline
+
+Malicious Server &
+Access or manipulate sensitive client data or computational outcomes. &
+Because the server could only drop the communication or modify packets, but not leak sensitive informations. \\ \hline
+
+Network Attacker &
+Intercept and read client-sensitive data from network traffic. &
+All the traffic is HE ciphered. \\ \hline
+
+\end{tabularx}
+\caption{Adversarial Threats and Mitigation Strategies}
+\label{table:adversaries}
+\end{table}
+
 
 \chapter{Testing}
 \section{Testing Methodology}
