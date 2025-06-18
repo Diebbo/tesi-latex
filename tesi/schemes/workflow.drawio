@@ -60,9 +60,6 @@
         <mxCell id="YgEAm29q99Pr3n_9_nYM-36" value="&lt;h2&gt;Workers&lt;/h2&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="347.5" y="480" width="90" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="9BL0vlbrnJeQ3a65S5Mm-1" value="&lt;h2&gt;Proxy&lt;/h2&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
-          <mxGeometry x="274.5" y="119" width="70" height="60" as="geometry" />
-        </mxCell>
         <mxCell id="9BL0vlbrnJeQ3a65S5Mm-2" value="&lt;div&gt;POST Key Share&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;rotation=-25;" vertex="1" parent="1">
           <mxGeometry x="254.5" y="200" width="110" height="30" as="geometry" />
         </mxCell>
