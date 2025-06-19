@@ -141,7 +141,8 @@ As we also mentioned in the previous attack, the system is vulnerable to a lack 
 
 In my own implementation, I addressed those issues by introducing different techniques from the state of the art, such as using a proxy re-encryptor and a position encoding mechanism based on Z-order. The choice of leaving the decryption operation to the client ensures that no one is able to read the sensitive data, despite an increase of computational resources required to re-encrypt each position for each parking spot.
 
-\subsection{Threat Model}
+% add lable
+\subsection{Threat Model} \label{subsec:threatmodel}
 
 In this section, we will analyze the threat model of the system, identifying the potential attackers and their capabilities. 
 
