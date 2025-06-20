@@ -229,6 +229,10 @@ Let's denote \( \xi_k \) as the encryption function, \( \xi_k^{-1} \) as the dec
     \xi_k(f(x)) = f(\xi_k(x))
 \]
 
+During the years, several Homomorphic Encryption schemes have been proposed, each with different properties and capabilities. The scheme used druing our tests is the Brakerski-Gentry-Vaikuntanathan (BGV, 2011) scheme \cite{Brakerski2012-wj}, which is a leveled fully homomorphic encryption scheme that supports both addition and multiplication operations on encrypted data. The BGV scheme is particularly notable for its efficiency and ability to handle large integers, making it suitable for practical applications in privacy-preserving computations.
+This scheme was based on the security of \textbf{(Ring) Learning With Errors} (RLWE) problem, which is a hard problem in lattice-based cryptography. The need for such a scheme arises from the increasing demand for secure computations in various fields, including cloud computing, data analysis, and machine learning. This type of new technology is designed to resist quantum computer and cryptanalysis. 
+\subsubsection{RLWE}
+
 \subsubsection{Fully Homomorphic Encryption}
 Fully Homomorphic Encryption (FHE) enables arbitrary computations on encrypted data without decryption. It allows for complex operations while maintaining data privacy, although it comes with significant computational overhead.
 
