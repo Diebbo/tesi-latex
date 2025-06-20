@@ -31,6 +31,30 @@ The protocol defines three main network entities:
     \item \textbf{Subscriber}: A client that expresses interest in specific topics and receives messages published to those topics by the broker.
 \end{itemize}
 
+\subsubsection{MQTT Quality of Service Levels}
+
+MQTT provides three quality of service (QoS) levels to ensure message delivery reliability:
+\begin{itemize}
+    \item \textbf{QoS 0 (At most once)}: The message is delivered at most once, with no acknowledgment from the receiver. This level is suitable for applications where occasional message loss is acceptable.
+    \item \textbf{QoS 1 (At least once)}: The message is guaranteed to be delivered at least once, with acknowledgment from the receiver. This level ensures that messages are not lost but may result in duplicates.
+    \item \textbf{QoS 2 (Exactly once)}: The message is guaranteed to be delivered exactly once, using a four-step handshake process. This level provides the highest reliability but incurs more overhead.
+\end{itemize}
+
+\subsubsection{MQTT Security}
+
+As we mentioned, one of the key features of MQTT is the possibility to scale the protocol to fit the needs of the application. This is possible by using different security features, such as TLS/SSL for secure communication, authentication mechanisms to verify client identities, and access control lists to restrict topic access. These features help protect against unauthorized access and ensure the integrity of messages exchanged between clients.
+
+\subsubsection{MQTT Workflow}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=10.5cm,height=4.7cm]{img/mqtt-workflow-example.png}
+    \caption{MQTT Workflow}
+    \label{fig:mqtt-workflow}
+\end{figure}
+
+Generally, the MQTT workflow starts with the client establishing a connection to the broker, using a TCP/IP connection with optional TSL/SSL security. Once connected, the client can publish messages to specific topics or subscribe to topics of interest. The broker then routes messages to subscribers based on their subscriptions.
+
 \subsection{LA-MQTT}
 LA-MQTT (Location-Aware MQTT) extends the standard MQTT protocol by incorporating location-based features. It enables spatial queries and location-aware message routing, making it particularly suitable for IoT applications requiring geographical context in message distribution.
 
@@ -65,12 +89,34 @@ Those operations include:
 Universal Location Referencing provides standardized methods for encoding and representing geographical locations. These systems ensure consistent and unambiguous location representation across different applications and platforms.
 
 \subsection{Cantor Pairing}
-Cantor Pairing is a mathematical technique that uniquely maps two natural numbers to a single natural number. This bijective function is particularly useful in computer science for combining two coordinates into a single value while maintaining the ability to recover the original coordinates.
+
+Cantor Pairing is a mathematical technique that uniquely maps two natural numbers to a single natural number. This bijective function $\pi: \mathbb{N} \to \mathbb{N}$ is particularly useful in computer science for combining two coordinates into a single value while maintaining the ability to recover the original coordinates.
 
 More formally, the Cantor pairing function is defined as:
 \[
     \pi(x, y) = \frac{(x + y)(x + y + 1)}{2} + y
 \]
+
+Although this function does not preserver algebraic properties, it porvides some unique properties derived from the fact that it is segmenting the two-dimansional space into a zig-zag pattern.
+
+\[
+    \pi(x, y) + 1 = \pi(x - 1, y + 1)
+\]
+
+Moreover, we also need to define the bheavior of the function when hits the boundaries of the first quadrant:
+
+\[
+    \pi(x, 0) + 1 = \pi(x + 1, 0)
+\]
+
+At last we denote the starting point of the Cantor pairing function as \( \pi(0, 0) = 0 \). This means that the function starts at the origin of the two-dimensional space and maps it to zero in the one-dimensional space. The inverse of the Cantor pairing function can be computed as follows:
+\[
+    \pi^{-1}(z) = \left( \frac{n(n + 1)}{2} - z, z - \frac{n(n + 1)}{2} \right)
+\]
+Where \( n \) is the largest integer such that \( \frac{n(n + 1)}{2} \leq z \). This allows us to retrieve the original coordinates \( (x, y) \) from the single value \( z \).
+
+This function is widely used in computer science, particularly in data structures and algorithms, where it is necessary to map multi-dimensional data to a single dimension for efficient storage and retrieval. It is also used in various applications such as database indexing, spatial data representation, and cryptography.
+
 
 \vspace{5mm}
 
@@ -92,7 +138,7 @@ The most common space-filling curves include:
     \item \textbf{Hilbert Curve}
 \end{itemize}
 
-\vspace{5mm}
+%\vspace{5mm}
 
 \begin{figure}[h]
     \centering
