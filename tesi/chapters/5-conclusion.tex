@@ -2,6 +2,8 @@
 
 \section{Summary}
 
+In this thesis, we presented a protocol for finding nearby parking spots in almost zero-trust scenario. The protocol is based on the use of homomorphic encryption to protect the client position and the parking spots, and it uses a combination of both publish/subscribe with request/response protocols to allow clients to find nearby parking spots without revealing their position to the server. The protocol is designed to be scalable and to work in a scenario, where the server cannot be trusted to handle sensitive data.
+
 \subsection{Results}
 
 From the testing phase, we can conclude that the protocol is feasible and functional. The performance of the homomorphic encryption scheme is acceptable for a real-world scenario, although it is still computationally more expensive than a traditional RSA solution. However, it can be applied in a zero-trust scenario, where the server cannot be trusted to handle sensitive data. The introduction of PRE (Proxy Re-Encryption) allows us to offload the computation to a trusted third party, which can be used to compute the distances between the client position and the parking spots without revealing the client position to the server. Moreover, this resolved the previous issue of the server possible leak of client position, under the threat model~\cref{subsec:threatmodel}.
@@ -10,7 +12,7 @@ From the testing phase, we can conclude that the protocol is feasible and functi
 
 One more factor to consider is the scalability of the protocol. The MCs and LDs can be scaled horizontally, meaning that we can add more servers to handle more clients and parking spots. The same applies to the server and workers; for instance, we can have multiple servers handling different areas of the metropolis, each with its own set of parking spots. However, the CA (Certificate Authority) is not. Moreover, the CA could have multiple instances, but they would need to be synchronized in order to issue certificates for the same client.
 
-\subsection{Protocol Limitations}
+\subsection{Protocol Limitations and Security Analysis}
 
 In conclusion, the protocol presented in this thesis is a feasible solution for the problem of finding nearby parking spots in a zero-trust scenario. This was possible thanks to the correct usage of the right network protocols, such as the publish/subscribe and request/response protocols. During my work, I concluded that even though the publish/subscribe protocol is preferred for this kind of applications, it does not match the requirements of a zero-trust scenario. Moreover, working with homomorphic encryption adds the requirement that the server is not allowed to know the plain text of the clients. This is a crucial point, as it does not allow us to infer informations from the client data. So, the request/response protocol works better in this sense: the client request anonymously a service, the server responds applying a list of operations to the encrypted data, and then the client can decrypt the result. In the opposite case, the server would need to know \emph{when} to respond to the client, which is most of the time a consequence of a side-effect to the request. Let's consider the case the LA-MQTT protocol \cref{sec:la-mqtt}: the client subscribes to a topic, and the server publishes the result based on the client location. In this case, is obvious that the server needs to know the client position in order to publish the result. Indeed, if this was the case, we would not be able to apply the homomorphic encryption scheme.
 

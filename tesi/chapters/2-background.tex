@@ -125,7 +125,7 @@ In many applications, especially related to positioning and spatial data, it is 
 \end{description}
 \subsection{Cantor Pairing}
 
-Cantor Pairing is a mathematical technique that uniquely maps two natural numbers to a single natural number. This bijective function $\pi: \mathbb{N} \to \mathbb{N}$ is particularly useful in computer science for combining two coordinates into a single value while maintaining the ability to recover the original coordinates.
+Cantor Pairing is a mathematical technique that uniquely maps two natural numbers to a single natural number (\cref{fig:cantor}) . This bijective function $\pi: \mathbb{N} \to \mathbb{N}$ is particularly useful in computer science for combining two coordinates into a single value while maintaining the ability to recover the original coordinates.
 
 More formally, the Cantor pairing function is defined as:
 \[
@@ -167,7 +167,7 @@ This function is widely used in computer science, particularly in data structure
 \section{Space Filling Curves}
 Space Filling Curves are mathematical curves that pass through every point in a multi-dimensional space. They provide a way to map multi-dimensional data to a single dimension while preserving spatial locality, making them valuable for spatial indexing and data organization.
 
-The most common space-filling curves include:
+The most common space-filling curves include (\cref{fig:space-filling}):
 \begin{itemize}
     \item \textbf{Z-order Curve}
     \item \textbf{Hilbert Curve}
@@ -204,6 +204,9 @@ Where:
     \item \( n \) is the number of bits used to represent each coordinate.
 \end{itemize}
 
+The Z-order curve can also be applied to encode vectors with dimensions greater than two. In this case, the encoding process involves interleaving the bits of all coordinates in a similar manner.
+
+
 \subsubsection{Z-order Decoding}
 The decoding process retrieves the original coordinates from the Z-order encoded value. Given a Z-order value \( Z \), the decoding can be performed by extracting the bits corresponding to each coordinate:
 \[
@@ -214,6 +217,8 @@ Where:
     \item \( Z \pmod{ 2^{2i+2} } \) extracts the bits corresponding to the \( i \)-th coordinate.
     \item The result is then shifted and combined to reconstruct the original coordinate \( x \).
 \end{itemize}
+
+The same process can be used to find the $y$ value by de-interleaving the other bits.
 
 \subsubsection{Z-order Querying}
 Let's consider a scenario where we want to find all points within a specific range in a two-dimensional space. We define \( P \) as the set of points in the space, and we want to find all points \( p \in P \) such that:
