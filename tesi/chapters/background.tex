@@ -230,14 +230,24 @@ Let's denote \( \xi_k \) as the encryption function, \( \xi_k^{-1} \) as the dec
 \]
 
 During the years, several Homomorphic Encryption schemes have been proposed, each with different properties and capabilities. The scheme used druing our tests is the Brakerski-Gentry-Vaikuntanathan (BGV, 2011) scheme \cite{Brakerski2012-wj}, which is a leveled fully homomorphic encryption scheme that supports both addition and multiplication operations on encrypted data. The BGV scheme is particularly notable for its efficiency and ability to handle large integers, making it suitable for practical applications in privacy-preserving computations.
-This scheme was based on the security of \textbf{(Ring) Learning With Errors} (RLWE) problem, which is a hard problem in lattice-based cryptography. The need for such a scheme arises from the increasing demand for secure computations in various fields, including cloud computing, data analysis, and machine learning. This type of new technology is designed to resist quantum computer and cryptanalysis. 
-\subsubsection{RLWE}
+This scheme was based on the security of \textbf{(Ring) Learning With Errors} (RLWE) \crer{subsec:rlwe) problem, which is a hard problem in lattice-based cryptography. The need for such a scheme arises from the increasing demand for secure computations in various fields, including cloud computing, data analysis, and machine learning. This type of new technology is designed to resist quantum computer and cryptanalysis. 
 
-\subsubsection{Fully Homomorphic Encryption}
-Fully Homomorphic Encryption (FHE) enables arbitrary computations on encrypted data without decryption. It allows for complex operations while maintaining data privacy, although it comes with significant computational overhead.
+\subsubsection{Security foundation: (Ring) Learning With Errors (RLWE)} \label{subsec:rlwe}
 
-\subsubsection{Partially Homomorphic Encryption}
-Partially Homomorphic Encryption (PHE) supports only specific types of operations (like addition or multiplication) on encrypted data. While more limited than FHE, it offers better performance and is feasible for applications requiring specific mathematical operations.
+The security of lattice-based FHE schemes, especially BGV, rests on the hardness of the Ring Learning With Errors (RLWE) problem, a ring-based variant of the Learning With Errors (LWE) problem introduced by Lyubashevsky, Peikert, and Regev in 2010 \cite{Lyubashevsky2010-jo}.
+. In RLWE, one works over a polynomial ring modulo both a prime $q$ and an irreducible polynomial $f(x)$:
+
+\[
+    a(x) = a_0 + a_1 x + \ldots + a_{n-1} x^{n-1}, \text{where } a_i \in \mathbb{Z}_q
+\]
+
+Samples are of the form $(a(x),\,b(x)=a(x)s(x)+e(x))$, where $e(x)$ is a small “error” polynomial. Recovering $s(x)$ given many such samples is presumed hard, based on reductions to the Shortest Vector Problem (SVP) in ideal lattices.
+
+\subsubsection{Homomorphic Encryption Types}
+
+\textbf{Fully Homomorphic Encryption (FHE)} allows the evaluation of arbitrary circuits of additions and multiplications over encrypted data, without decryption. However, earlier FHE schemes suffered from inefficiencies, particularly due to large growth of noise. The BGV scheme answered these challenges by avoiding Gentry’s “bootstrapping” \cite{brakerski2011leveled} step via \emph{leveled} evaluation, and controlling noise through \emph{modulus switching} and \emph{relinearization} techniques.
+
+\textbf{Partially Homomorphic Encryption (PHE)} supports only one type of operation—either addition (e.g., Paillier) or multiplication (e.g., RSA variants). These are faster than FHE but limited in expressiveness, making them suitable for simpler tasks where only one operation type is required.
 
 \section{Usage of HE for Matching}
 Homomorphic Encryption can be used to securely match location. To archive this, we can use different techniques such as:
