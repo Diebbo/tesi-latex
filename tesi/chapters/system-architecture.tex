@@ -119,9 +119,10 @@ For our study case, we will assume that the centralized server is responsible fo
     \label{fig:protocol-flow}
 \end{figure}
 
-We can summarize the protocol flow in the following steps:
-
 \subsection{Protocol Flow}
+
+We can summarize the protocol flow in the following steps as shown in \cref{fig:protocol-flow}:
+
 \begin{enumerate}
     \item The clients and the parking spots register to the system, after that they receive the general position encoding parameter from the server using the \textbf{Position Encoding Parameters} API via HTTP GET request. The parameters are used to encode the positions of the clients and the parking spots. \emph{(API: \texttt{Position Encoding Parameters}, Payload: \{none\} $\to \{encoding\_params: [\text{z-order}, \text{precision}, \text{working area}, \text{grid cell size}]\}$})
     \item The mobile client $MC_i$ generates a new public/private key pair $(k_{mc_i}^+, k_{mc_i}^-)$ and sends the public key to the certification authority (CA) using the \textbf{Key Share} API via an HTTP POST request. \emph{(API: \texttt{Key Share}, Payload: $\{id: ID_{mc_i},\ k_{mc_i}^+\} \to { \text{None} }$)}
