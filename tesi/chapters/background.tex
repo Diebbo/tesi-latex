@@ -85,6 +85,14 @@ Those operations include:
     \item \textbf{Content Publish}: The backend publishes content related to the subscribed topics, forwarding it to the subscribed MCs.
 \end{itemize}
 
+LA-MQTT integrates two privacy-preserving strategies within its client-side architecture:
+The first strategy is based on randomized location perturbation. This method applies controlled noise to the GPS coordinates before transmission. Specifically, for a given GPS value $P_i$, a user-defined number of decimal digits dd is preserved, while the remaining digits are randomly replaced. This approach balances between:
+\begin{itemize}
+    \item Privacy Preservation (PP): Higher randomness enhances anonymity.
+    \item Spatial Precision (SP): Excessive perturbation can degrade the accuracy of spatial notifications.
+\end{itemize}
+The second strategy involves the use of dummy updates. Here, the MC alternates between sending real and synthetic (dummy) location data. In each sequence of $b+1$ updates, only one is the actual position; the others are randomly generated or trajectory-based decoys.
+
 \section{Universal Location Referencing}
 Universal Location Referencing provides standardized methods for encoding and representing geographical locations. These systems ensure consistent and unambiguous location representation across different applications and platforms.
 
