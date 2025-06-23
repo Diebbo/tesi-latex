@@ -43,7 +43,7 @@ This centralized component is crucial in the architecture, as it allows all sort
 Thanks to HE, the server can perform computation without knowing the clear text positions of the other actors.
 
 \subsection{Certification Authority / Proxy}
-The certification authority (CA) is a trusted entity responsible for managing the public keys of the clients and the public/private keys of the parking spots. Because he is a trusted entity, the CA knows the private keys of the parking spots. Thus, it can generate the symmetric translation keys required for a secure computation of the client distances without revealing clear text positions.
+The certification authority (CA) is a trusted entity responsible for storing the public keys of the clients and managing the public/private keys of the parking spots. Because he is a trusted entity, the CA knows the private keys of the parking spots. Thus, it can generate the symmetric translation keys required for a secure computation of the client distances without revealing clear text positions.
 
 In our system, the CA also acts like a proxy re-encryptor\cite{POLYAKOV2017FastPRE}, as it is responsible for managing the right keys for the homomorphic operation made on the encrypted data. 
 
@@ -75,7 +75,7 @@ The system is designed to allow the following operations:
 \hline
 \textbf{API} & \textbf{Subject} & \textbf{Protocol} & \textbf{Receiver} & \textbf{Payload} \\ \hline
 
-Position Encoding Paramters & Clients / LDs & HTTP GET & Server & - \\ \hline
+Position Encoding Parameters & Clients / LDs & HTTP GET & Server & - \\ \hline
 
 Key Obtain & LDs & HTTP GET & CA / Proxy & $\{id: ID_{park_j}\}$ \\ \hline
 
