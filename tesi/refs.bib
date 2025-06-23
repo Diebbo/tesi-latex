@@ -93,13 +93,112 @@
   library = "openFHE",
   title = "openfhe-python",
   url = "https://github.com/openfheorg/openfhe-python",
-  author = "OpenFHE org and others"
+  author = "OpenFHE org and others",
 }
 
-@online{ibarrond2022hedistancetricks,
-  url = "https://github.com/ibarrond/Pyfhel/issues/155",
+@misc{ibarrond2022hedistancetricks,
+  howpublished = {\url{"https://github.com/ibarrond/Pyfhel/issues/155"}},
   title = "Pyfhel: Distance coordinates distance calculation tricks",
   author = " Alberto Ibarrondo",
   year = "2022",
+  key = {PyfhelDistanceTricks},
 }
 
+@misc{sealcrypto,
+  title = {{M}icrosoft {SEAL} (release 4.1)},
+  howpublished = {\url{https://github.com/Microsoft/SEAL}},
+  month = jan,
+  year = 2023,
+  note = {Microsoft Research, Redmond, WA.},
+  key = {SEAL},
+} 
+
+@article{sealembedded,
+  title = {{SEAL}-Embedded: A Homomorphic Encryption Library for the Internet of
+           Things},
+  author = {Deepika Natarajan and Wei Dai},
+  journal = {{IACR} Transactions on Cryptographic Hardware and Embedded Systems},
+  publisher = {Ruhr-Universit{\"a}t Bochum},
+  year = 2021,
+  month = jul,
+  pages = {756--779},
+  valume = 2021,
+  number = 3,
+  doi = {10.46586/tches.v2021.i3.756-779},
+  issn = {2569-2925},
+  note = {\url{https://tches.iacr.org/index.php/TCHES/article/view/8991}},
+}
+
+@inproceedings{Brakerski2012-wj,
+  title = "(Leveled) fully homomorphic encryption without bootstrapping",
+  booktitle = "Proceedings of the 3rd Innovations in Theoretical Computer
+               Science Conference",
+  author = "Brakerski, Zvika and Gentry, Craig and Vaikuntanathan, Vinod",
+  abstract = "We present a novel approach to fully homomorphic encryption (FHE)
+              that dramatically improves performance and bases security on weaker
+              assumptions. A central conceptual contribution in our work is a new
+              way of constructing leveled fully homomorphic encryption schemes
+              (capable of evaluating arbitrary polynomial-size circuits), without
+              Gentry's bootstrapping procedure. Specifically, we offer a choice
+              of FHE schemes based on the learning with error (LWE) or ring-LWE
+              (RLWE) problems that have 2$\lambda$ security against known
+              attacks. For RLWE, we have: • A leveled FHE scheme that can
+              evaluate L-level arithmetic circuits with {\~O}($\lambda$ · L3)
+              per-gate computation -- i.e., computation quasi-linear in the
+              security parameter. Security is based on RLWE for an approximation
+              factor exponential in L. This construction does not use the
+              bootstrapping procedure. • A leveled FHE scheme that uses
+              bootstrapping as an optimization, where the per-gate computation
+              (which includes the bootstrapping procedure) is {\~O}($\lambda$2),
+              independent of L. Security is based on the hardness of RLWE for
+              quasi-polynomial factors (as opposed to the sub-exponential factors
+              needed in previous schemes). We obtain similar results to the above
+              for LWE, but with worse performance. Based on the Ring LWE
+              assumption, we introduce a number of further optimizations to our
+              schemes. As an example, for circuits of large width -- e.g., where
+              a constant fraction of levels have width at least $\lambda$ -- we
+              can reduce the per-gate computation of the bootstrapped version to
+              {\~O}($\lambda$), independent of L, by batching the bootstrapping
+              operation. Previous FHE schemes all required $\Omega$($\lambda$3.5)
+              computation per gate. At the core of our construction is a much
+              more effective approach for managing the noise level of
+              lattice-based ciphertexts as homomorphic operations are performed,
+              using some new techniques recently introduced by Brakerski and
+              Vaikuntanathan (FOCS 2011).",
+  publisher = "ACM",
+  month = jan,
+  year = 2012,
+  address = "New York, NY, USA",
+  conference = "ITCS '12: Innovations in Theoretical Computer Science",
+  location = "Cambridge Massachusetts",
+}
+
+@misc{cryptoeprint:2014/725,
+  author = {Ruan de Clercq and Sujoy Sinha Roy and Frederik Vercauteren and
+            Ingrid Verbauwhede},
+  title = {Efficient Software Implementation of Ring-{LWE} Encryption},
+  howpublished = {Cryptology {ePrint} Archive, Paper 2014/725},
+  year = {2014},
+  url = {https://eprint.iacr.org/2014/725},
+}
+
+@incollection{Lyubashevsky2010-jo,
+  title = "On ideal lattices and learning with errors over rings",
+  booktitle = "Advances in Cryptology -- {EUROCRYPT} 2010",
+  author = "Lyubashevsky, Vadim and Peikert, Chris and Regev, Oded",
+  publisher = "Springer Berlin Heidelberg",
+  pages = "1--23",
+  series = "Lecture notes in computer science",
+  year = 2010,
+  address = "Berlin, Heidelberg",
+}
+
+@inproceedings{brakerski2011leveled,
+  title = "{(Leveled) Fully Homomorphic Encryption without Bootstrapping}",
+  author = "Zvika Brakerski and Craig Gentry and Vinod Vaikuntanathan",
+  booktitle = "Proceedings of ITCS",
+  year = "2011",
+  note = "Extended version published in {\it ACM Transactions on Computation
+          Theory}, 2014",
+  doi = "10.1145/2633600",
+}
