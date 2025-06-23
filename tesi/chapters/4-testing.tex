@@ -68,7 +68,7 @@ crypto_context.EvalMultKeyGen(keypair.secretKey)
 \end{lstlisting}
 
 
-The next step is to compute the distances between the client position and the parking spots. The code snippet in Listing \ref{lst:compute-distances} shows the code used to compute the distances using the homomorphic encryption scheme.
+The next step is to compute the distances between the client position and the parking spots. The code snippet in \cref{lst:compute-distances} shows the code used to compute the distances using the homomorphic encryption scheme.
 
 \begin{lstlisting}[caption={Computing distances using Homomorphic Encryption}, label={lst:compute-distances}]
 # Encrypt the client position
@@ -102,7 +102,7 @@ In order to have a fair comparison with other common encryption standards, I mad
 
 The overall time performance of the protocol is shown in \cref{fig:he-vs-rsa} confirms that the HE standard has some overhead compared to the RSA standard, but it is still acceptable for a real-world scenario. The main difference between the two encryption standards is that, with the symmetric encryption, the server, after decrypting the client position, is much faster in computing the distances, as it can be achieved in a couple of instructions.
 
-Although the homomorphic encryption needs to perform a simple subtraction, it is still slower, as values need to be packed to match HE standards \ref{lst:compute-distances}.
+Although the homomorphic encryption needs to perform a simple subtraction, it is still slower, as values need to be packed to match HE standards as done in \cref{lst:compute-distances}.
 
 It also worth to mention the way the distances are computed in our protocol. Firstly, we need to encode the GPS coordinates into a grid-like structure. This operation is essential to ensure that we are considering small areas instead of points \cref{lst:distance-computation}. Then we apply a unique encoding to the grid coordinates, transforming them from a two-dimensional grid into a one-dimensional z-order curve. By having a single integer representation we can perform easily the distance.
 
