@@ -21,7 +21,7 @@ The testing environment consists of a virtual machine instance on a server, with
     \item numpy version: 1.24.0
 \end{itemize}
 
-\section{Performance Evaluation}
+\section{Performance Evaluation} \label{sec:testing-performance}
 
 The first test that we performed was to measure the time taken to encrypt and decrypt the client position using the homomorphic encryption scheme. The results are shown in Figure \ref{fig:testing-enc}. The time taken to encrypt around 50 parkings with the same key is around 0.5 seconds, while the time taken to decrypt the client position is around 0.2 seconds. This shows that the homomorphic encryption scheme is efficient for this use case, but it still grows linearly with the number of data points.
 
@@ -161,29 +161,17 @@ def interleave_bits(x, y):
 \end{lstlisting}
 
 
-There are also other approaches to compute distances between two encrypted points\cite{ibarrond2022hedistancetricks}, such as:
+There are also other approaches to compute distances between two encrypted points\cite{ibarrond2022hedistancetricks}, as mentioned for the methods in \cref{sec:background-distances}:
 \begin{itemize}
-    \item \textbf{Cosine similarity:} normally calculated as 
-    $
-    \mathrm{CS}(\mathbf{x}, \mathbf{y}) = \frac{\sum_i x_i y_i}{\|\mathbf{x}\| \cdot \|\mathbf{y}\|}
-    $
-    which requires computing a division and a norm. This can be resolved by normalizing the vectors, i.e., $\mathbf{x}' = \mathbf{x} / \|\mathbf{x}\|$ and $\mathbf{y}' = \mathbf{y} / \|\mathbf{y}\|$, encrypting $\mathbf{x}'$ and $\mathbf{y}'$, and then performing a simple scalar product: $\sum_i x'_i y'_i$.
+    \item \textbf{Cosine similarity:} This can be resolved by normalizing the vectors, i.e., $\mathbf{x}' = \mathbf{x} / \|\mathbf{x}\|$ and $\mathbf{y}' = \mathbf{y} / \|\mathbf{y}\|$, encrypting $\mathbf{x}'$ and $\mathbf{y}'$, and then performing a simple scalar product: $\sum_i x'_i y'_i$.
     
-    \item \textbf{Euclidean Distance:} defined as
-    $
-    \mathrm{ED}(\mathbf{x}, \mathbf{y}) = \sqrt{\sum_i (x_i - y_i)^2}
-    $
-    which would require a square root operation.\\
+    \item \textbf{Euclidean Distance:} would require a square root operation.\\
     Instead we use the \textbf{Squared Euclidean Distance} instead:
     $
     \mathrm{SED}(\mathbf{x}, \mathbf{y}) = \sum_i (x_i - y_i)^2
     $
     
-    \item \textbf{Manhattan Distance:} defined as
-    $
-    \mathrm{MD}(\mathbf{x}, \mathbf{y}) = \sum_i |x_i - y_i|
-    $
-    which would require computing the absolute value.\\
+    \item \textbf{Manhattan Distance:} in this case it is also require computing the absolute value.\\
     If you encrypt only binary values (i.e., $\hat{\mathbf{x}}, \hat{\mathbf{y}}$ such that $\hat{x}_i, \hat{y}_i \in \{0,1\}$ for all $i$), you can reformulate:
     $
     \mathrm{MD}(\hat{\mathbf{x}}, \hat{\mathbf{y}}) = \sum_i (\hat{x}_i - \hat{y}_i)^2 = \mathrm{HD}(\hat{\mathbf{x}}, \hat{\mathbf{y}})
@@ -197,10 +185,6 @@ There are also other approaches to compute distances between two encrypted point
 \end{itemize}
 
 Rounding off, all of this methods relies on the fact that you still need to compute calculation on floating point numbers, which is not ideal for homomorphic encryption. Another way could be to normalize the coordinates to integers, with a fixed order of magnitude, but at this point it is not worth the effort as the z-order encoding is already a good solution for this problem.
-
-
-\section{Security Analysis}
-
 
 
 \section{Conclusions and Future Works}

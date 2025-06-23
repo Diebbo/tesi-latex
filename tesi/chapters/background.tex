@@ -10,7 +10,7 @@ HTTPS is a version of HTTP built on the SSL/TLS protocol, providing secure commu
 
 One of the key features of HTTPS is its use of certificates to authenticate the server, ensuring that clients are communicating with the intended entity. This is possible through a relatively high usage of computational resources, which is a trade-off for the enhanced security it provides.
 
-\subsection{Reuqest-Response in IoT devices}
+\subsection{Request-Response in IoT devices}
 HTTPS is a commonly used choice also for IoT devices. However, its usability is often limited due to a number of factors:
 \begin{itemize}
     \item \textbf{Resource Constraints\cite{mazhar2023iotsecurity}}: Encrypting and decrypting certificates standards (RSA, EEC, AES) can be computationally expensive, which is a significant concern for IoT devices with limited processing power and memory.
@@ -53,12 +53,12 @@ As we mentioned, one of the key features of MQTT is the possibility to scale the
     \label{fig:mqtt-workflow}
 \end{figure}
 
-Generally, the MQTT workflow starts with the client establishing a connection to the broker, using a TCP/IP connection with optional TSL/SSL security. Once connected, the client can publish messages to specific topics or subscribe to topics of interest. The broker then routes messages to subscribers based on their subscriptions.
+Generally, the MQTT workflow starts with the client establishing a connection to the broker, using a TCP/IP connection with optional TLS/SSL security. Once connected, the client can publish messages to specific topics or subscribe to topics of interest. The broker then routes messages to subscribers based on their subscriptions.
 
 \subsection{LA-MQTT} \label{sec:la-mqtt}
 LA-MQTT (Location-Aware MQTT) extends the standard MQTT protocol by incorporating location-based features. It enables spatial queries and location-aware message routing, making it particularly suitable for IoT applications requiring geographical context in message distribution.
 
-The protocol is first intruduced with the purpose of resolving the limitations of traditional MQTT in handling location-based data\cite{montori2022lamqtt}.
+The protocol is first introduced with the purpose of resolving the limitations of traditional MQTT in handling location-based data\cite{montori2022lamqtt}.
 
 \begin{table}[h]
 \small
@@ -68,7 +68,7 @@ The protocol is first intruduced with the purpose of resolving the limitations o
 Position publish & MC & Publish & GPS\_DATA & $\{position: ( P_i )\}$ \\ \hline
 Topic subscription & MC & Subscribe & $C(i, t_s)$ & * \\ \cline{2-5}
  & MC & Publish & MC\_SUB & $\{ mc: i, topic: t_s \}$ \\ \hline
-Geofence publish & LDS & Publish & GEOFENCE\_DATA & $\{topic: t_s, content: c_s, $\newline$region: g_s, event: e_s\}$ \\ \hline
+Geo fence publish & LDS & Publish & GEO\_FENCE\_DATA & $\{topic: t_s, content: c_s, $\newline$region: g_s, event: e_s\}$ \\ \hline
 Content publish & Backend & Publish & $C(i, t_s)$ & $\{content: c_s\}$ \\ \hline
 \end{tabularx}
 \caption{The LA-MQTT Publish-subscribe Operations}
@@ -81,7 +81,7 @@ Those operations include:
 \begin{itemize}
     \item \textbf{Position Publish}: MC publish their GPS data to the broker, allowing other clients to receive updates on their positions.
     \item \textbf{Topic Subscription}: MCs subscribe to specific topics, enabling them to receive messages related to their areas of interest.
-    \item \textbf{Geofence Publish}: LDSs publish geofence data, which includes the topic, content, region, and event associated with the geofence.
+    \item \textbf{Geo fence Publish}: LDSs publish geo fence data, which includes the topic, content, region, and event associated with the Geo fence.
     \item \textbf{Content Publish}: The backend publishes content related to the subscribed topics, forwarding it to the subscribed MCs.
 \end{itemize}
 
@@ -96,6 +96,33 @@ The second strategy involves the use of dummy updates. Here, the MC alternates b
 \section{Universal Location Referencing}
 Universal Location Referencing provides standardized methods for encoding and representing geographical locations. These systems ensure consistent and unambiguous location representation across different applications and platforms.
 
+\subsection{Background: Distance Measures Between Vectors}
+\label{sec:background-distances}
+
+In many applications, especially related to positioning and spatial data, it is essential to measure the similarity or dissimilarity between vectors. This is particularly relevant in fields such as machine learning, computer vision, and geographic information systems (GIS). To analyze similarity or dissimilarity between vectors $\mathbf{x}, \mathbf{y} \in \mathbb{R}^n$, three standard distance metrics are:
+
+\begin{description}
+  \item[Cosine similarity:]
+  \[
+    \mathrm{CS}(\mathbf{x}, \mathbf{y}) 
+    = \frac{\sum_i x_i y_i}{\|\mathbf{x}\| \cdot \|\mathbf{y}\|}.
+  \]
+  This measures the angle between vectors and is scaleâ€‘invariant.
+
+  \item[Euclidean distance:]
+  \[
+    \mathrm{ED}(\mathbf{x}, \mathbf{y}) 
+    = \sqrt{\sum_i (x_i - y_i)^2}.
+  \]
+  It represents the straight-line distance but involves a non-linear square-root.
+
+  \item[Manhattan distance:]
+  \[
+    \mathrm{MD}(\mathbf{x}, \mathbf{y}) 
+    = \sum_i |x_i - y_i|.
+  \]
+  Also known as the $\ell_1$ norm, it sums up absolute differences.
+\end{description}
 \subsection{Cantor Pairing}
 
 Cantor Pairing is a mathematical technique that uniquely maps two natural numbers to a single natural number. This bijective function $\pi: \mathbb{N} \to \mathbb{N}$ is particularly useful in computer science for combining two coordinates into a single value while maintaining the ability to recover the original coordinates.
@@ -105,13 +132,13 @@ More formally, the Cantor pairing function is defined as:
     \pi(x, y) = \frac{(x + y)(x + y + 1)}{2} + y
 \]
 
-Although this function does not preserver algebraic properties, it porvides some unique properties derived from the fact that it is segmenting the two-dimansional space into a zig-zag pattern.
+Although this function does not preserver algebraic properties, it provides some unique properties derived from the fact that it is segmenting the two-dimensional space into a zig-zag pattern.
 
 \[
     \pi(x, y) + 1 = \pi(x - 1, y + 1)
 \]
 
-Moreover, we also need to define the bheavior of the function when hits the boundaries of the first quadrant:
+Moreover, we also need to define the behavior of the function when hits the boundaries of the first quadrant:
 
 \[
     \pi(x, 0) + 1 = \pi(x + 1, 0)
@@ -161,8 +188,8 @@ The Hilbert Curve is particularly notable for its ability to preserve locality, 
 
 On the other hand, the Z-order Curve, preserve the order of positions in a grid-like manner, making it suitable for applications requiring efficient spatial queries. Thus, it's possible to reduce the problem of finding matching points into finding the maximum prefix of two bit strings.
 
-\subsection{Z-order Curve}
-As mentioned, the Z-order curve is one of the most widely used space-filling curves. It maps multi-dimensional data into a single dimension, similar to the Cantor encoding function. Conversly, it has some some useful properties, when applied to spacial data, such as preserving locality and allowing efficient range queries.
+\subsection{Z-order Curve} \label{sec:z-order-curve}
+As mentioned, the Z-order curve is one of the most widely used space-filling curves. It maps multi-dimensional data into a single dimension, similar to the Cantor encoding function. Conversely, it has some some useful properties, when applied to spacial data, such as preserving locality and allowing efficient range queries.
 
 \subsubsection{Z-order Encoding}
 
@@ -198,7 +225,7 @@ We can leverage the Z-order encoding to efficiently query this range. This is po
 By definition we can represent the GPS coordinates of a point \( (x_p, y_p) \) into a point \( e_p \). This point will be represented in the space of \( n \) orders, each contained in \( \mathbb{Z}_4 \).
 
 \subsubsection{Maximum Common Prefix Search}
-A key operation in Z-order based spatial queries is finding the maximum common prefix between two Z-order encoded values. This operation is fundamental for determinating spatial relationships between points.
+A key operation in Z-order based spatial queries is finding the maximum common prefix between two Z-order encoded values. This operation is fundamental for determining spatial relationships between points.
 
 Given two Z-order encoded values \( Z_1 \) and \( Z_2 \), we can find the maximum common prefix by following three steps. Firstly, we convert both values to their binary representation. Then, we compare the bits from left to right, stopping at the first position where the bits differ. Finally, we extract the common prefix up to that point. The cited algorithm shows that in the worst case, the maximum common prefix can be found in \( O(n) \) time, where \( n \) is the number of bits in the Z-order encoding.
 
@@ -230,17 +257,18 @@ The efficiency of this approach comes from the fact that we can perform these op
 Privacy Preserving techniques ensure the protection of sensitive information while allowing necessary computations and data processing. These methods are crucial in maintaining confidentiality in distributed systems and data analysis. For example, in the context of location-based services, privacy-preserving techniques allow for the sharing of location data without revealing exact coordinates, thus protecting user privacy.
 
 \subsection{Homomorphic Encryption}
-Homomorphic Encryption(HE) is a form of encryption that allows specific types of computations to be performed on ciphertext, producing an encrypted result that, when decrypted, matches the result of operations performed on the plaintext.
+Homomorphic Encryption(HE) is a form of encryption that allows specific types of computations to be performed on cipher text, producing an encrypted result that, when decrypted, matches the result of operations performed on the plain text.
 
-Let's denote \( \xi_k \) as the encryption function, \( \xi_k^{-1} \) as the decryption function, and \( f \) as a function that can be computed on plaintexts. Homomorphic Encryption satisfies the property:
+Let's denote \( \xi_k \) as the encryption function, \( \xi_k^{-1} \) as the decryption function, and \( f \) as a function that can be computed on plain texts. Homomorphic Encryption satisfies the property:
+
 \[
     \xi_k(f(x)) = f(\xi_k(x))
 \]
 
-During the years, several Homomorphic Encryption schemes have been proposed, each with different properties and capabilities. The scheme used druing our tests is the Brakerski-Gentry-Vaikuntanathan (BGV, 2011) scheme \cite{Brakerski2012-wj}, which is a leveled fully homomorphic encryption scheme that supports both addition and multiplication operations on encrypted data. The BGV scheme is particularly notable for its efficiency and ability to handle large integers, making it suitable for practical applications in privacy-preserving computations.
-This scheme was based on the security of \textbf{(Ring) Learning With Errors} (RLWE) \crer{subsec:rlwe) problem, which is a hard problem in lattice-based cryptography. The need for such a scheme arises from the increasing demand for secure computations in various fields, including cloud computing, data analysis, and machine learning. This type of new technology is designed to resist quantum computer and cryptanalysis. 
+During the years, several Homomorphic Encryption schemes have been proposed, each with different properties and capabilities. The scheme used during our tests is the Brakerski-Gentry-Vaikuntanathan (BGV, 2011) scheme \cite{Brakerski2012-wj}, which is a leveled fully homomorphic encryption scheme that supports both addition and multiplication operations on encrypted data. The BGV scheme is particularly notable for its efficiency and ability to handle large integers, making it suitable for practical applications in privacy-preserving computations.
+This scheme was based on the security of \textbf{(Ring) Learning With Errors} (RLWE) \cref{sec:rlwe} problem, which is a hard problem in lattice-based cryptography. The need for such a scheme arises from the increasing demand for secure computations in various fields, including cloud computing, data analysis, and machine learning. This type of new technology is designed to resist quantum computer and cryptanalysis. 
 
-\subsubsection{Security foundation: (Ring) Learning With Errors (RLWE)} \label{subsec:rlwe}
+\subsubsection{Security foundation: (Ring) Learning With Errors (RLWE)} \label{sec:rlwe}
 
 The security of lattice-based FHE schemes, especially BGV, rests on the hardness of the Ring Learning With Errors (RLWE) problem, a ring-based variant of the Learning With Errors (LWE) problem introduced by Lyubashevsky, Peikert, and Regev in 2010 \cite{Lyubashevsky2010-jo}.
 . In RLWE, one works over a polynomial ring modulo both a prime $q$ and an irreducible polynomial $f(x)$:
@@ -260,12 +288,12 @@ Samples are of the form $(a(x),\,b(x)=a(x)s(x)+e(x))$, where $e(x)$ is a small â
 \section{Usage of HE for Matching}
 Homomorphic Encryption can be used to securely match location. To archive this, we can use different techniques such as:
 \begin{itemize}
-    \item \textbf{Distance Calculation}: It is archived by tweeking the distance calculation algorithms (e.g., Euclidean distance, Cosine similarity, Manhattan Distance) to work with encrypted coordinates. The main limit comes with the constraint that the operations must be compatible with the encryption scheme used. For instance, calculating the squared Euclidean distance between two points \( (x_1, y_1) \) and \( (x_2, y_2) \) can be expressed as:
+    \item \textbf{Distance Calculation}: It is archived by tweaking the distance calculation algorithms (mentioned before in \cref{sec:background-distances} e.g., Euclidean distance, Cosine similarity, Manhattan Distance) to work with encrypted coordinates. The main limit comes with the constraint that the operations must be compatible with the encryption scheme used. For instance, calculating the squared Euclidean distance between two points \( (x_1, y_1) \) and \( (x_2, y_2) \) can be expressed as:
     \[
         d^2 = (x_1 - x_2)^2 + (y_1 - y_2)^2
     \]
-    That can be computed homomorphically, and then decrypted before computing the square root to get the actual distance.
-    \item \textbf{Encoding Coordinates}: By encoding coordinates into a grid-like structure, we can reduce the problem into finding two different points sharing the same area-encoding. This apporach comes with some limitations, mainly related to the precision of the approximation and the size of the grid. Still, it allows for efficient matching of points within a specific area without revealing their exact coordinates.
+    That can be computed homomorphically, and then decrypted before computing the square root to get the actual distance. We will further discuss this in the Testing Section \ref{sec:testing-performance}.
+    \item \textbf{Encoding Coordinates}: By encoding coordinates into a grid-like structure, we can reduce the problem into finding two different points sharing the same area-encoding. This approach comes with some limitations, mainly related to the precision of the approximation and the size of the grid. Still, it allows for efficient matching of points within a specific area without revealing their exact coordinates. This is done by applying a space-filling curve, such as Z-order \cref{sec:z-order-curve}, to the coordinates.
 \end{itemize}
 
 \subsubsection{Privacy-Preserving Z-order Queries}
@@ -300,3 +328,4 @@ For example, given a precise GPS coordinate \( (43.084451, -77.680069) \), the s
 The choice between Partially and Fully Homomorphic Encryption has significant implications for system performance, security, and functionality. As previously discussed, the two methods used for proximity checks in a location-based scenario require careful consideration of the encryption scheme.
 
 If the requirements only involve checking whether two positions share a common area, leveraging the speed and simplicity of the Z-order approach is recommended. Conversely, if the goal is to compute a precise floating-point distance value, a homomorphically encrypted distance function (e.g., Euclidean distance) may be necessary. However, it is important to note that in this case, the final result may be affected by computational noise inherent to FHE operations.
+
