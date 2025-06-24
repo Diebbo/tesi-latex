@@ -1,1 +1,26 @@
 \chapter{Introduction} \label{chap:intro}
+
+% Structure of the introduction:
+% - What is the problem?
+%     - Hide user position in LA-MQTT
+%     - maximize privacy over performance
+% - Why is it important?
+%     - Privacy is a fundamental right in location-based services
+%     - Zero-trust scenarios are becoming more common
+% - How do i solve it?
+%     - Use homomorphic encryption to protect user position
+%     - Combine publish/subscribe with request/response protocols
+%
+% narrow down the scope.
+%
+% General > Specific > More Specific
+
+In recent years, location-based services (LBS) have become increasingly prevalent in our daily lives. From finding nearby accommodations or points of interest to accessing services tailored to our geographical context, location-awareness is playing an essential role in modern applications. However, this convenience comes at a cost: the necessity of sharing users' location data with third parties, often leading to significant privacy concerns.
+
+Exposing our location could lead to unwanted tracking, profiling, and even physical harm. Therefore, it is crucial to adopt technologies that can preserve user privacy even in adversarial settings. For this purpose, homomorphic encryption (HE) emerges as a promising solution that allows computations to be performed on encrypted data without revealing the underlying plain text. This means that sensitive information, such as our location, can be processed without exposing it to the server. This type of encryption is becoming extremely popular in field such as cloud computing, where data is often stored and processed by third-party providers. 
+At the same time, we are witnessing a shift towards zero-trust protocols, where no middle man is trusted and there is no central authority that can be relied upon to handle sensitive data. 
+
+
+During my thesis, I have explored the use of homomorphic encryption in privacy-preserving protocols, with a focus on location-based services. In particular, I have developed a protocol that allows clients to find nearby parking spots without revealing their position to the server. The protocol is based on the use of homomorphic encryption to protect the client position and the parking spots, and it uses a combination of publish/subscribe with request/response protocols to allow clients to find nearby parking spots without revealing their position to the server.
+
+The need to creating a privacy-preserving protocol comes from the necessity of implementing inside the protocol LA-MQTT this type of mechanism. The protocol was designed to be used with other types of privacy standards that would only obfuscate the client position, but not hide it completely.
