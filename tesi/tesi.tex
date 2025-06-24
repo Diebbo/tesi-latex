@@ -111,17 +111,13 @@
 
 \restoregeometry
 \newpage
-\begin{center}
-    (DA FARE ALLA FINE)\\
-    5 parole chiave per caratterizzare il contenuto della dissertazione:\\ (se non ti piacciono così sparse puoi anche semplicemente scriverle su una riga sola)
-\end{center}
 
 % https://tex.stackexchange.com/questions/26538/words-scattered-randomly-in-on-coverpage
 \begin{tikzpicture}[overlay,remember picture,shift=(current page.center)]
 \pgfmathsetseed{3}
 
 
-\foreach [count=\count] \word in {Parola 1, parola 2, parola 3, parola 4, parola 5} {
+\foreach [count=\count] \word in {Homomorphic Encryption, Privacy, Network Protocols, Zero-Trust, Location} {
 \node [
     xshift={(mod(\count,3)-1)*(\paperwidth/4)},
     yshift={(mod(\count,7)-3)*(\paperwidth/6)},
