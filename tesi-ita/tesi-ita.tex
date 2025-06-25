@@ -1,0 +1,15 @@
+\documentclass[12pt,a4paper,twoside]{book}
+
+\usepackage[a4paper,inner=3.5cm,outer=2.5cm]{geometry}
+
+\begin{document}
+\chapter{Sommario del Progetto}
+
+Questa tesi presenta un studio delle applicazioni della crittografia omomorfica in protocolli di comunicazione orientati alla privacy. Durante lo studio ci siamo soffermati sull'analizzare e comparare la differenza di prestazioni fra questi protocolli, in un possible utilizzo in un contesto reale. Ci siamo quindi concentrati sulla ricerca di criticità e punti di \textit{Publisher-Subscriber} e \textit{Request-Response}.
+Una parte centrale del lavoro è stata quella di confrontare i differenti modelli di "encoding" di dati geografici, in modo da renderne compatibile l'utilizzo con crittografia omomorfica. Non è stato possibile utilizzare direttamente un modello di dati spaziali GPS, in quanto rappresentato tramite numeri a virgola mobile, che non sono supportati nativamente dalla crittografia omomorfica. Per questo motivo è stato necessario cambiare il modello di riferimento, passando all'utilizzo di un encoding basato su interi, più precisamente un modello a griglia che enumerasse le celle tramite "space-filling curves".
+
+Entrando nello specifico, è stato ideato e progettato un protocollo di comunicazione che combini ambedue le modalità discusse precedentemente, che massimizzi le prestazioni e riduca sprechi di risorse (specialmente nella counicazione). Questo protocollo è stato ideato avendo come modello di riferimento Location Aware MQTT, un estensione di MQTT pensata per l'utilizzo con sensori e telefoni mobili, i quali pubblicano e ricevno rispettivamente posizioni in tempo reale. Il motivo per è stata affrontata questa tesi è stata la necessità di applicare un meccanismo di crittografia a questo genere di protocolli, in modo da garantire la privacy di tutti gli attori coinvolti.
+
+Durante lo studio sono state affrontate le problamite principali che la crittografia omomorfica intrinsecamente presenta: gestione delle chiavi e delle chiavi di traduzione, alte risorse computazionali (non presenti in dispositivi mobili e IoT) e gestione della sicurezza dei dati. Per ovviare ai primi due problmi è stato utilizzato un sistema di gestione delle chiavi semi-centralizzato combinato ad un proxy re-encryptior che permettesse di alleggerire il carico computazionele ai sensori ed allo stesso tempo garantire l'anonimato dei dati. Per quanto riguarda il terzo problema, è stato necessario assicurarsi che i singoli client presenti all'interno del nostro sistema siano gli unici in grado di poter decifrare i dati. Questo piccolo accorgimento è stato un dei problemi più gravi presentati nella precedente versione di HE LA-MQTT, nella quale i dati veninvano decifrati dalla Certification Authority, che per un errore di progettazione permetteva fuoriuscita di dati sensibili.
+
+\end{document}
