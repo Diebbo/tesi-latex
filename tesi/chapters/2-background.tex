@@ -22,7 +22,27 @@ HTTPS is a commonly used choice also for IoT devices. However, its usability is 
     \item \textbf{Weak or Nonexistent Certificate Validation\cite{bishopfox2020weakcertificates}}: Many IoT devices do not validate server certificates properly, leading to potential vulnerabilities.
 \end{itemize}
 
-This limitation has led to the development of alternative protocols and standards that are more suitable for IoT devices, such as CoAP (Constrained Application Protocol) and MQTT\cref{sec:mqtt}. These protocols are designed to be lightweight and efficient, making them more suitable for resource-constrained devices.
+This limitation has led to the development of alternative protocols and standards that are more suitable for IoT devices, such as CoAP (see \cref{sec:coap}) and MQTT (see \cref{sec:mqtt}). These protocols are designed to be lightweight and efficient, making them more suitable for resource-constrained devices.
+
+\subsection{CoAP} \label{sec:coap}
+
+CoAP (Constrained Application Protocol) is a specialized web transfer protocol designed for constrained devices and low-power networks\cite{rfc7252}. It operates over UDP, making it lightweight and suitable for IoT applications. CoAP supports request-response interactions similar to HTTP but is optimized for low-bandwidth and high-latency environments.
+
+The protocol presents several key features:
+\begin{itemize}
+    \item Web protocol fulfilling M2M requirements in constrained
+      environments.
+    \item UDP-based with support for multicast.
+    \item Low header overhead and parsing complexity.
+    \item URI and Content-type support.
+    \item Simple proxy and caching capabilities.
+    \item A stateless HTTP mapping, allowing proxies to be built providing access to CoAP resources via HTTP in a uniform way or for HTTP simple interfaces to be realized alternatively over CoAP.
+    \item Security binding to Datagram Transport Layer Security (DTLS)
+\end{itemize}
+
+Due to its design, CoAP can replicate the RESTful architecture of HTTP, supporting methods such as GET, POST, PUT, and DELETE. Additionally, CoAP provides an \textit{observe} mechanism that enables clients to subscribe to resources and receive notifications upon changes.
+
+Henceforth, unless otherwise specified, any reference to an HTTP request should be interpreted as referring to a \textbf{CoAP request}.
 
 \section{Publish-Subscribe Protocol}
 Publish-Subscribe (Pub/Sub) is an asynchronous messaging pattern where senders (publishers) categorize messages into topics without the knowledge of the receivers (subscribers). Subscribers express interest in specific topics and receive messages published on those topics. This decoupled architecture enables scalable and flexible communication in distributed systems.
