@@ -5,11 +5,11 @@
 \chapter{Testing} \label{chap:testing}
 \section{Testing Methodology}
 
-For the testing of the protocol, we implemented a proof-of-concept in Python, using the OpenFHE library\cite{openFHE}. The testing methodology consists of the following steps. Firstly, we generate a set of random positions for the parking spots. After that, we generate a random position for the client, we compute the z-order encoding for both the client and the parking spots, and finally we computed the distances between the client position and the parking spots using the homomorphic encryption scheme.
+For the testing of the protocol, we implemented a proof-of-concept in Python, using the OpenFHE library\cite{openFHE}. The testing methodology consists of the following steps. Firstly, we generate a set of random positions for the parking spots. After that, we generate a random position for the client, compute the z-order encoding for both the client and the parking spots, and finally, compute the distances between the client position and the parking spots using the homomorphic encryption scheme.
 
-To ensure a fair comparison, we test different scenarios with different sets of hyper parameters, such as the number of parking spots, the number of clients running simultaneously, a range of network delays, and the edge size in meters of a grid cell (used to encode the GPS coordinates). The goal is to measure the performance of the homomorphic encryption scheme in terms of encryption and decryption time, as well as the time taken to compute the distances between the client position and the parking spots.
+To ensure a fair comparison, we test different scenarios with different sets of hyperparameters, such as the number of parking spots, the number of clients running simultaneously, a range of network delays, and the edge size in meters of a grid cell (used to encode the GPS coordinates). The goal is to measure the performance of the homomorphic encryption scheme in terms of encryption and decryption time, as well as the time taken to compute the distances between the client position and the parking spots.
 
-At the same time, we also computed the distance calculation using a clear computation (trusted backend) with encrypted with asymmetric encryption (RSA) traffic. This allows us to compare the performance of the homomorphic encryption scheme against a traditional asymmetric encryption scheme.
+At the same time, we also computed the distance calculation using a clear computation (trusted backend) with asymmetric encrypted (RSA) traffic. This allows us to compare the performance of the homomorphic encryption scheme against a traditional asymmetric encryption scheme.
 
 The testing environment consists of a virtual machine instance on a server, with the following specifications:
 \begin{itemize}
@@ -23,7 +23,7 @@ The testing environment consists of a virtual machine instance on a server, with
 
 \section{Performance Evaluation} \label{sec:testing-performance}
 
-The first test that we perform is to measure the time taken to encrypt and decrypt the client position using the homomorphic encryption scheme. The results are shown in Figure \ref{fig:testing-enc}. The time taken to encrypt around 50 parkings with the same key is around 0.5 seconds, while the time taken to decrypt the client position is around 0.2 seconds. This resoults that the homomorphic encryption scheme is efficient for this use case, but it still grows linearly with the number of data points.
+The first test that we perform is to measure the time taken to encrypt and decrypt the client position using the homomorphic encryption scheme. The results are shown in Figure \ref{fig:testing-enc}. The time taken to encrypt around 50 parking with the same key is around 0.5 seconds, while the time taken to decrypt the client position is around 0.2 seconds. This results that the homomorphic encryption scheme is efficient for this use case, but it still grows linearly with the number of data points.
 
 \begin{figure}[h]
     \centering
@@ -68,10 +68,10 @@ crypto_context.EvalMultKeyGen(keypair.secretKey)
 \end{lstlisting}
 
 
-The next step is to compute the distances between the client position and the parking spots. The code snippet in \cref{lst:compute-distances} shows the code used to compute the distances using the homomorphic encryption scheme.
+The next step is to compute the distances between the client's position and the parking spots. The code snippet in \cref{lst:compute-distances} shows the code used to compute the distances using the homomorphic encryption scheme.
 
 \begin{lstlisting}[caption={Computing distances using Homomorphic Encryption}, label={lst:compute-distances}]
-# Encrypt the client position
+# Encrypt the client's position
 query_plaintext = crypto_context.MakePackedPlaintext([query_encoded])
 query_ciphertext = crypto_context.Encrypt(keypair.publicKey, query_plaintext)
 
@@ -89,9 +89,9 @@ for spot_id, spot in spots.items():
 
 \end{lstlisting}
 
-This two sections from the original codebase showcase how the encryption distance calculation works. The full code contains additional logic for handling metrics and logging.
+These two sections from the original codebase showcase how the encryption distance calculation works. The full code contains additional logic for handling metrics and logging.
 
-In order to have a fair comparison with other common encryption standards, I made the test run in parallel by multi-processing on the same machine. This refiniment made the test more realistic, as in a real-world scenario, multiple clients would be sending requests to the server at the same time with multiple parking spots (subscribers).
+In order to have a fair comparison with other common encryption standards, I made the test run in parallel by multi-processing on the same machine. This refinement made the test more realistic, as in a real-world scenario, multiple clients would be sending requests to the server at the same time with multiple parking spots (subscribers).
 
 \begin{figure}[h]
     \centering
@@ -100,11 +100,11 @@ In order to have a fair comparison with other common encryption standards, I mad
     \label{fig:he-vs-rsa}
 \end{figure}
 
-The overall time performance of the protocol is shown in \cref{fig:he-vs-rsa} confirms that the HE standard has some overhead compared to the RSA standard, but it is still acceptable for a real-world scenario. The main difference between the two encryption standards is that, with the symmetric encryption, the server, after decrypting the client position, is much faster in computing the distances, as it can be achieved in a couple of instructions.
+The overall time performance of the protocol is shown in \cref{fig:he-vs-rsa} confirms that the HE standard has some overhead compared to the RSA standard, but it is still acceptable for a real-world scenario. The main difference between the two encryption standards is that, with symmetric encryption, the server can compute distances much faster after decrypting the client's position, often in just a few instructions.
 
 Although the homomorphic encryption needs to perform a simple subtraction, it is still slower, as values need to be packed to match HE standards as done in \cref{lst:compute-distances}.
 
-It also worth to mention the way the distances are computed in our protocol. Firstly, we need to encode the GPS coordinates into a grid-like structure. This operation is essential to ensure that we are considering small areas instead of points \cref{lst:distance-computation}. Then we apply a unique encoding to the grid coordinates, transforming them from a two-dimensional grid into a one-dimensional z-order curve. By having a single integer representation we can perform easily the distance.
+It is also worth to mention the way the distances are computed in our protocol. Firstly, we need to encode the GPS coordinates into a grid-like structure. This operation is essential to ensure that we are considering small areas instead of points \cref{lst:distance-computation}. Then we apply a unique encoding to the grid coordinates, transforming them from a two-dimensional grid into a one-dimensional z-order curve. By having a single integer representation we can perform easily the distance.
 
 \begin{lstlisting}[caption={Distance computation using z-order encoding}, label={lst:distance-computation}]
 def calculate_grid_sizes_for_radius(radius_meters, max_lat, min_lat, max_lon, min_lon):
@@ -140,7 +140,7 @@ def interleave_bits(x, y):
     Interleave the bits of x and y to create a Morton code.
     x and y should be non-negative integers, each limited to 16 bits.
     """
-    # Ensure inputs are within 16-bit range
+    # Ensure inputs are within the 16-bit range
     x = min(x, 0xFFFF)
     y = min(y, 0xFFFF)
     
@@ -168,7 +168,7 @@ There are also other approaches to compute distances between two encrypted point
     \mathrm{SED}(\mathbf{x}, \mathbf{y}) = \sum_i (x_i - y_i)^2
     $
     
-    \item \textbf{Manhattan Distance:} in this case it is also require computing the absolute value.\\
+    \item \textbf{Manhattan Distance:} in this case it also requires computing the absolute value.\\
     If you encrypt only binary values (i.e., $\hat{\mathbf{x}}, \hat{\mathbf{y}}$ such that $\hat{x}_i, \hat{y}_i \in \{0,1\}$ for all $i$), you can reformulate:
     $
     \mathrm{MD}(\hat{\mathbf{x}}, \hat{\mathbf{y}}) = \sum_i (\hat{x}_i - \hat{y}_i)^2 = \mathrm{HD}(\hat{\mathbf{x}}, \hat{\mathbf{y}})
@@ -181,5 +181,4 @@ There are also other approaches to compute distances between two encrypted point
     
 \end{itemize}
 
-Rounding off, all of these methods have the problems of relying on calculations on floating point numbers, which is not ideal for homomorphic encryption. Another way could be to normalize the coordinates to integers, with a fixed order of magnitude, but it is not worth the effort, as the z-order encoding is already a good solution for this problem.
-
+Rounding off, all of these methods have the problem of relying on calculations on floating point numbers, which is not ideal for homomorphic encryption. Another way could be to normalize the coordinates to integers, with a fixed order of magnitude, but it is not worth the effort, as the z-order encoding is already a good solution for this problem.
