@@ -27,7 +27,7 @@ Homomorphic encryption incurs high computational costs, so the system optimizes 
 \section{Actors}
 
 \subsection{Location Data Source}
-The Location Data Source (LDS), commonly referred to as sensors or parkings, are responsible for collecting and publishing location data. In our system, we assume they independently publish their data to the broker, based on the event they register. For instance, if a sensor detects a free parking spot, it publishes the information to the broker, that will start the encryption protocol. This happens also when a parking spot is occupied, allowing the system to keep track of the available parking spots in real-time.
+The Location Data Source (LDS), commonly referred to as sensors or parkings, are responsible for collecting and publishing location data. In our system, we assume they independently publish their data to the server, based on the event they register. For instance, if a sensor detects a free parking spot, it publishes the information to the broker, that will start the encryption protocol. This happens also when a parking spot is occupied, allowing the system to keep track of the available parking spots in real-time.
 
 Note that by maintaining the availability of the parking spots, independent from the clients, we can ensure that the system is able to provide privacy-preserving updates to the server. Conversely, if the clients were also responsible for reserving the parking spots, they would need to expose their positions to the server, which would compromise the privacy of the system.
 
