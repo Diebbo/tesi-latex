@@ -22,10 +22,12 @@ HTTPS is a commonly used choice also for IoT devices. However, its usability is 
     \item \textbf{Weak or Nonexistent Certificate Validation\cite{bishopfox2020weakcertificates}}: Many IoT devices do not validate server certificates properly, leading to potential vulnerabilities.
 \end{itemize}
 
+This limitation has led to the development of alternative protocols and standards that are more suitable for IoT devices, such as CoAP (Constrained Application Protocol) and MQTT\cref{sec:mqtt}. These protocols are designed to be lightweight and efficient, making them more suitable for resource-constrained devices.
+
 \section{Publish-Subscribe Protocol}
 Publish-Subscribe (Pub/Sub) is an asynchronous messaging pattern where senders (publishers) categorize messages into topics without knowledge of the receivers (subscribers). Subscribers express interest in specific topics and receive messages published to those topics. This decoupled architecture enables scalable and flexible communication in distributed systems.
 
-\subsection{MQTT}
+\subsection{MQTT} \label{sec:mqtt}
 MQTT (Message Queuing Telemetry Transport) is a lightweight, open-source messaging protocol designed for constrained devices and low-bandwidth, high-latency networks. It implements the publish-subscribe pattern over TCP/IP, providing three quality of service levels for message delivery and supporting various security features.
 
 The protocol defines three main network entities:
