@@ -111,17 +111,13 @@
 
 \restoregeometry
 \newpage
-\begin{center}
-    (DA FARE ALLA FINE)\\
-    5 parole chiave per caratterizzare il contenuto della dissertazione:\\ (se non ti piacciono così sparse puoi anche semplicemente scriverle su una riga sola)
-\end{center}
 
 % https://tex.stackexchange.com/questions/26538/words-scattered-randomly-in-on-coverpage
 \begin{tikzpicture}[overlay,remember picture,shift=(current page.center)]
 \pgfmathsetseed{3}
 
 
-\foreach [count=\count] \word in {Parola 1, parola 2, parola 3, parola 4, parola 5} {
+\foreach [count=\count] \word in {Homomorphic Encryption, Privacy, Network Protocols, Zero-Trust, Location} {
 \node [
     xshift={(mod(\count,3)-1)*(\paperwidth/4)},
     yshift={(mod(\count,7)-3)*(\paperwidth/6)},
@@ -137,9 +133,9 @@
 \topmargin=6.5cm
 \begin{flushright}
 \emph{
-\LARGE{La dedica}\\\vspace{2mm}
-\LARGE{anche quella se vuoi}\\\vspace{3mm} 
-\LARGE{su più righe} 
+\LARGE{A me, }\\\vspace{2mm}
+\LARGE{Alla fortuna che mi sono creato}\\\vspace{2mm}
+\LARGE{e al mio di-ego}\\\vspace{3mm} 
 }
 \end{flushright}
 \newpage~\newpage
@@ -155,7 +151,13 @@
 
 
 \chapter*{Abstract}
-Abstract qui (ti consiglio di farlo alla fine)
+This thesis presents a comprehensive study on the application of homomorphic encryption (HE) in privacy-preserving communication protocols, with a particular focus on location-based services. We analyze and compare their effectiveness and performance to identify the practical limitations they face in real-world scenarios. 
+A central part of this work explores different encoding strategies (such as z-order) that enable location data to be securely processed under homomorphic encryption schemes in a grid. We examine how these strategies impact both the privacy guarantees and the computational overhead of the protocols.
+
+
+As a case study, we design and implement a protocol that allows mobile clients to discover nearby parking spots without revealing their precise location to the server. 
+Special attention is given to the integration of HE in publish/subscribe and request/response paradigms and to the trade-offs that would arise.
+The protocol is designed starting from the previous analysis of existing solutions, such as LA-MQTT, and incorporates homomorphic encryption to ensure that the server can process location queries without accessing sensitive data. We evaluate the performance of our protocol in terms of computational efficiency and communication overhead, comparing it with existing solutions.
 
 \topmargin=-1cm
 \tableofcontents

@@ -2,7 +2,7 @@
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
 
-\chapter{Testing}
+\chapter{Testing} \label{chap:testing}
 \section{Testing Methodology}
 
 For the testing of the protocol, we implemented a proof-of-concept in Python, using the OpenFHE library\cite{openFHE}. The testing methodology consists of the following steps. Firstly, we generate a set of random positions for the parking spots. After that, we generate a random position for the client, we compute the z-order encoding for both the client and the parking spots, and finally we computed the distances between the client position and the parking spots using the homomorphic encryption scheme.
@@ -156,6 +156,7 @@ def interleave_bits(x, y):
     return int(result, 2)
 \end{lstlisting}
 
+\label{lst:distance-computation-tricks}
 
 There are also other approaches to compute distances between two encrypted points\cite{ibarrond2022hedistancetricks}, as mentioned for the methods in \cref{sec:background-distances}:
 \begin{itemize}

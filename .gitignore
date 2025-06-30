@@ -277,3 +277,5 @@ TSWLatexianTemp*
 
 # output files from the latexmk package
 tesi/.latexmk
+tesi/todo.md
+tesi-ita/.latexmk/out/tesi-ita.pdf
