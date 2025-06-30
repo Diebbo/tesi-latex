@@ -19,9 +19,9 @@
         <mxCell id="YgEAm29q99Pr3n_9_nYM-4" value="" style="sketch=0;aspect=fixed;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;fillColor=#00188D;shape=mxgraph.mscae.enterprise.workstation_client" parent="1" vertex="1">
           <mxGeometry x="120" y="320" width="50" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="9BL0vlbrnJeQ3a65S5Mm-33" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" target="9BL0vlbrnJeQ3a65S5Mm-22" edge="1" source="kfD3mXovoqSjr9ffwBBw-4">
+        <mxCell id="9BL0vlbrnJeQ3a65S5Mm-33" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" target="9BL0vlbrnJeQ3a65S5Mm-22" edge="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="460" y="290" as="sourcePoint" />
+            <mxPoint x="495.9646302250803" y="275" as="sourcePoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="YgEAm29q99Pr3n_9_nYM-6" value="" style="sketch=0;aspect=fixed;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;fillColor=#00188D;shape=mxgraph.mscae.enterprise.database_server" parent="1" vertex="1">
@@ -135,10 +135,10 @@
           <mxGeometry x="368" y="320" width="24" height="50" as="geometry" />
         </mxCell>
         <mxCell id="kfD3mXovoqSjr9ffwBBw-3" value="&lt;h3&gt;MQTT Broker&lt;/h3&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=10;" vertex="1" parent="1">
-          <mxGeometry x="344.5" y="285" width="100" height="50" as="geometry" />
+          <mxGeometry x="344.5" y="280" width="100" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="kfD3mXovoqSjr9ffwBBw-4" value="&lt;h3&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;REST API&lt;/font&gt;&lt;/h3&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
-          <mxGeometry x="460" y="275" width="70" height="60" as="geometry" />
+        <mxCell id="kfD3mXovoqSjr9ffwBBw-5" value="&lt;h3&gt;REST API&lt;/h3&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="450" y="280" width="80" height="50" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
