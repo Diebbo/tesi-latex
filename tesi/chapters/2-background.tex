@@ -316,6 +316,21 @@ Samples are of the form $(a(x),\,b(x)=a(x)s(x)+e(x))$, where $e(x)$ is a small �
 
 \textbf{Partially Homomorphic Encryption (PHE)} supports only one type of operation—either addition (e.g., Paillier) or multiplication (e.g., RSA variants). These are faster than FHE but limited in expressiveness, making them suitable for simpler tasks where only one operation type is required.
 
+\subsubsection{HE Translation Key}
+
+Originally introduced in 1998, Blaze, Bleumer, and Strauss (BBS)\cite{Blaze1998-cw} proposed an application called atomic proxy re-encryption, the mechanism enables ciphertexts encrypted under one public key to be transformed into ciphertexts decryptable under another key—without exposing the underlying plaintexts or private keys. It addresses the challenge of heterogeneity in multi‑actor systems, eliminating the need for a central trusted broker to perform decryption and re‑encryption. Instead, each data owner can generate a *Translation Key* that authorizes on‑the‑fly ciphertext conversion by other parties.
+
+Consider a privacy‑preserving workflow involving three participants—Alice, Bob, and Charlie—each with their respective keypairs $(k_A^+, k_A^-)$, $(k_B^+, k_B^-)$, and $(k_C^+, k_C^-)$. Suppose Alice wants to store encrypted data on Bob’s untrusted server. She encrypts her data under $k_A^+$ and uploads the ciphertext. Since Bob cannot decrypt (he lacks $k_A^-$), Charlie would also be unable to access the data directly. However, if Alice generates and distributes a Translation Key $k_{A\to C}$, Charlie can convert the ciphertext into one encrypted under $k_C^+$ and then decrypt it with $k_C^-$, without learning Alice’s private key or Bob’s data.
+
+The Translation Key creation requires Alice's Private key and Charlie's Public key, ensuring that only authorized parties can perform the conversion.
+
+\[
+    k_{A\to C} = f(k_A^-,k_C^+)
+\]
+
+By allowing secure key-conditional ciphertext conversion, the Translation Key mechanism preserves confidentiality across distinct encryption domains. This is particularly valuable when multiple data owners—with different keys—need to perform joint encrypted computations on a shared ciphertext under a common key.
+
+
 \section{Usage of HE for Matching}
 Homomorphic Encryption can be used to securely match location. To archive this, we can use different techniques such as:
 \begin{itemize}
