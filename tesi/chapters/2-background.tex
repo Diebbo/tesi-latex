@@ -312,7 +312,7 @@ Samples are of the form $(a(x),\,b(x)=a(x)s(x)+e(x))$, where $e(x)$ is a small �
 
 \subsection{Homomorphic Encryption Types}
 
-\textbf{Fully Homomorphic Encryption (FHE)} allows the evaluation of arbitrary circuits of additions and multiplications over encrypted data, without decryption. However, earlier FHE schemes suffered from inefficiencies, particularly due to the large growth of noise. The BGV scheme answered these challenges by avoiding Gentry’s “bootstrapping” \cite{brakerski2011leveled} step via \emph{leveled} evaluation, and controlling noise through \emph{modulus switching} and \emph{relinearization} techniques.
+\textbf{Fully Homomorphic Encryption (FHE)} allows the evaluation of arbitrary circuits of additions and multiplications over encrypted data, without decryption. However, earlier FHE schemes suffered from inefficiencies, particularly due to the large growth of noise. The BGV scheme answered these challenges by avoiding Gentry’s “bootstrapping” \cite{Brakerski2012-wj} step via \emph{leveled} evaluation, and controlling noise through \emph{modulus switching} and \emph{relinearization} techniques.
 
 \textbf{Partially Homomorphic Encryption (PHE)} supports only one type of operation—either addition (e.g., Paillier) or multiplication (e.g., RSA variants). These are faster than FHE but limited in expressiveness, making them suitable for simpler tasks where only one operation type is required.
 
