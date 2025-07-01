@@ -316,7 +316,7 @@ Samples are of the form $(a(x),\,b(x)=a(x)s(x)+e(x))$, where $e(x)$ is a small �
 
 \textbf{Partially Homomorphic Encryption (PHE)} supports only one type of operation—either addition (e.g., Paillier) or multiplication (e.g., RSA variants). These are faster than FHE but limited in expressiveness, making them suitable for simpler tasks where only one operation type is required.
 
-\subsubsection{HE Translation Key}
+\subsubsection{HE Translation Key} \label{sec:translation-key}
 
 Originally introduced in 1998, Blaze, Bleumer, and Strauss (BBS)\cite{Blaze1998-cw} proposed an application called atomic proxy re-encryption, the mechanism enables ciphertexts encrypted under one public key to be transformed into ciphertexts decryptable under another key—without exposing the underlying plaintexts or private keys. It addresses the challenge of heterogeneity in multi‑actor systems, eliminating the need for a central trusted broker to perform decryption and re‑encryption. Instead, each data owner can generate a *Translation Key* that authorizes on‑the‑fly ciphertext conversion by other parties.
 
