@@ -310,13 +310,13 @@ In RLWE, one works over a polynomial ring modulo both a prime $q$ and an irreduc
 
 Samples are of the form $(a(x),\,b(x)=a(x)s(x)+e(x))$, where $e(x)$ is a small “error” polynomial. Recovering $s(x)$ given many such samples is presumed hard, based on reductions to the Shortest Vector Problem (SVP) in ideal lattices.
 
-\subsubsection{Homomorphic Encryption Types}
+\subsection{Homomorphic Encryption Types}
 
 \textbf{Fully Homomorphic Encryption (FHE)} allows the evaluation of arbitrary circuits of additions and multiplications over encrypted data, without decryption. However, earlier FHE schemes suffered from inefficiencies, particularly due to the large growth of noise. The BGV scheme answered these challenges by avoiding Gentry’s “bootstrapping” \cite{brakerski2011leveled} step via \emph{leveled} evaluation, and controlling noise through \emph{modulus switching} and \emph{relinearization} techniques.
 
 \textbf{Partially Homomorphic Encryption (PHE)} supports only one type of operation—either addition (e.g., Paillier) or multiplication (e.g., RSA variants). These are faster than FHE but limited in expressiveness, making them suitable for simpler tasks where only one operation type is required.
 
-\subsubsection{HE Translation Key} \label{sec:translation-key}
+\subsection{HE Translation Key} \label{sec:translation-key}
 
 Originally introduced in 1998, Blaze, Bleumer, and Strauss (BBS)\cite{Blaze1998-cw} proposed an application called atomic proxy re-encryption, the mechanism enables ciphertexts encrypted under one public key to be transformed into ciphertexts decryptable under another key—without exposing the underlying plaintexts or private keys. It addresses the challenge of heterogeneity in multi‑actor systems, eliminating the need for a central trusted broker to perform decryption and re‑encryption. Instead, each data owner can generate a *Translation Key* that authorizes on‑the‑fly ciphertext conversion by other parties.
 
