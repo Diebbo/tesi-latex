@@ -42,7 +42,7 @@ The protocol presents several key features:
 
 Due to its design, CoAP can replicate the RESTful architecture of HTTP, supporting methods such as GET, POST, PUT, and DELETE. Additionally, CoAP provides an \textit{observe} mechanism that enables clients to subscribe to resources and receive notifications upon changes.
 
-Henceforth, unless otherwise specified, any reference to an HTTP request should be interpreted as referring to a \textbf{CoAP request}.
+Henceforth, references to HTTP requests could be interpreted as referring to a \textbf{CoAP request}. Moreover, my protocol is designed to be compatible with IoT devices where bandwidth, data rate, and power consumption are critical factors. CoAP's lightweight nature and efficient use of resources make it a suitable choice for such applications.
 
 \section{Publish-Subscribe Protocol}
 Publish-Subscribe (Pub/Sub) is an asynchronous messaging pattern where senders (publishers) categorize messages into topics without the knowledge of the receivers (subscribers). Subscribers express interest in specific topics and receive messages published on those topics. This decoupled architecture enables scalable and flexible communication in distributed systems.
