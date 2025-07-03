@@ -18,8 +18,8 @@ One of the key features of HTTPS is its use of certificates to authenticate the 
 HTTPS is a commonly used choice also for IoT devices. However, its usability is often limited due to several factors:
 \begin{itemize}
     \item \textbf{Resource Constraints\cite{mazhar2023iotsecurity}}: Encrypting and decrypting certificate standards (RSA, EEC, AES) can be computationally expensive, which is a significant concern for IoT devices with limited processing power and memory.
-    \item \textbf{Lack of Secure Firmware Updates\cite{cyberark2024iot}}: Many IoT devices do not support secure firmware updates, making it difficult to patch vulnerabilities in the HTTPS implementation.
-    \item \textbf{Weak or Nonexistent Certificate Validation\cite{bishopfox2020weakcertificates}}: Many IoT devices do not validate server certificates properly, leading to potential vulnerabilities.
+    \item \textbf{Lack of Secure Firmware Updates\cite{Bettayeb2019tw}}: Many IoT devices do not support secure firmware updates, making it difficult to patch vulnerabilities in the HTTPS implementation.
+    \item \textbf{Weak or Nonexistent Certificate Validation\cite{paracha2021iotls}}: Many IoT devices do not validate server certificates properly, leading to potential vulnerabilities.
 \end{itemize}
 
 This limitation has led to the development of alternative protocols and standards that are more suitable for IoT devices, such as CoAP (see \cref{sec:coap}) and MQTT (see \cref{sec:mqtt}). These protocols are designed to be lightweight and efficient, making them more suitable for resource-constrained devices.
@@ -318,7 +318,7 @@ Samples are of the form $(a(x),\,b(x)=a(x)s(x)+e(x))$, where $e(x)$ is a small �
 
 \subsection{HE Translation Key} \label{sec:translation-key}
 
-Originally introduced in 1998, Blaze, Bleumer, and Strauss (BBS)\cite{Blaze1998-cw} proposed an application called atomic proxy re-encryption, the mechanism enables ciphertexts encrypted under one public key to be transformed into ciphertexts decryptable under another key—without exposing the underlying plaintexts or private keys. It addresses the challenge of heterogeneity in multi‑actor systems, eliminating the need for a central trusted broker to perform decryption and re‑encryption. Instead, each data owner can generate a *Translation Key* that authorizes on‑the‑fly ciphertext conversion by other parties.
+Originally introduced in 1998, Blaze, Bleumer, and Strauss (BBS)\cite{Blaze1998cw} proposed an application called atomic proxy re-encryption, the mechanism enables ciphertexts encrypted under one public key to be transformed into ciphertexts decryptable under another key—without exposing the underlying plaintexts or private keys. It addresses the challenge of heterogeneity in multi‑actor systems, eliminating the need for a central trusted broker to perform decryption and re‑encryption. Instead, each data owner can generate a *Translation Key* that authorizes on‑the‑fly ciphertext conversion by other parties.
 
 Consider a privacy‑preserving workflow involving three participants—Alice, Bob, and Charlie—each with their respective keypairs $(k_A^+, k_A^-)$, $(k_B^+, k_B^-)$, and $(k_C^+, k_C^-)$. Suppose Alice wants to store encrypted data on Bob’s untrusted server. She encrypts her data under $k_A^+$ and uploads the ciphertext. Since Bob cannot decrypt (he lacks $k_A^-$), Charlie would also be unable to access the data directly. However, if Alice generates and distributes a Translation Key $k_{A\to C}$, Charlie can convert the ciphertext into one encrypted under $k_C^+$ and then decrypt it with $k_C^-$, without learning Alice’s private key or Bob’s data.
 

@@ -222,13 +222,70 @@
               overhead, and simplicity for constrained environments.},
 }
 
-@INCOLLECTION{Blaze1998-cw,
-  title     = "Divertible protocols and atomic proxy cryptography",
+@incollection{Blaze1998cw,
+  title = "Divertible protocols and atomic proxy cryptography",
   booktitle = "Lecture Notes in Computer Science",
-  author    = "Blaze, Matt and Bleumer, Gerrit and Strauss, Martin",
+  author = "Blaze, Matt and Bleumer, Gerrit and Strauss, Martin",
   publisher = "Springer Berlin Heidelberg",
-  pages     = "127--144",
-  series    = "Lecture notes in computer science",
-  year      =  1998,
-  address   = "Berlin, Heidelberg"
+  pages = "127--144",
+  series = "Lecture notes in computer science",
+  year = 1998,
+  address = "Berlin, Heidelberg",
+}
+
+@inproceedings{Bettayeb2019tw,
+  title = "Firmware update attacks and security for {IoT} devices",
+  booktitle = "Proceedings of the {ArabWIC} 6th Annual International Conference
+               Research Track",
+  author = "Bettayeb, Meriem and Nasir, Qassim and Talib, Manar Abu",
+  publisher = "ACM",
+  pages = "1--6",
+  month = mar,
+  year = 2019,
+  address = "New York, NY, USA",
+  copyright = "https://www.acm.org/publications/policies/copyright\_policy\#
+               Background",
+  conference = "ArabWIC 2019: ArabWIC 6th Annual International Conference
+                Research Track",
+  location = "Rabat Morocco",
+}
+
+@inproceedings{paracha2021iotls,
+  author = {Paracha, Muhammad Talha and Dubois, Daniel J. and Vallina-Rodriguez,
+            Narseo and Choffnes, David},
+  title = {IoTLS: understanding TLS usage in consumer IoT devices},
+  year = {2021},
+  isbn = {9781450391290},
+  publisher = {Association for Computing Machinery},
+  address = {New York, NY, USA},
+  url = {https://doi.org/10.1145/3487552.3487830},
+  doi = {10.1145/3487552.3487830},
+  abstract = {Consumer IoT devices are becoming increasingly popular, with most
+              leveraging TLS to provide connection security. In this work, we
+              study a large number of TLS-enabled consumer IoT devices to shed
+              light on how effectively they use TLS, in terms of establishing
+              secure connections and correctly validating certificates, and how
+              observed behavior changes over time. To this end, we gather more
+              than two years of TLS network traffic from IoT devices, conduct
+              active probing to test for vulnerabilities, and develop a novel
+              blackbox technique for exploring the trusted root stores in IoT
+              devices by exploiting a side-channel through TLS Alert Messages. We
+              find a wide range of behaviors across devices, with some adopting
+              best security practices but most being vulnerable in one or more of
+              the following ways: use of old/insecure protocol versions and/or
+              ciphersuites, lack of certificate validation, and poor maintenance
+              of root stores. Specifically, we find that at least 8 IoT devices
+              still include distrusted certificates in their root stores, 11/32
+              devices are vulnerable to TLS interception attacks, and that many
+              devices fail to adopt modern protocol features over time. Our
+              findings motivate the need for IoT manufacturers to audit, upgrade,
+              and maintain their devices' TLS implementations in a consistent and
+              uniform way that safeguards all of their network traffic.},
+  booktitle = {Proceedings of the 21st ACM Internet Measurement Conference},
+  pages = {165–178},
+  numpages = {14},
+  keywords = {IoT, TLS, embedded systems security, internet of things,
+              measurement techniques, network security, transport layer security},
+  location = {Virtual Event},
+  series = {IMC '21},
 }
